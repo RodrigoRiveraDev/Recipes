@@ -55,7 +55,6 @@ public class UserController {
         }
     }
 
-
     @RequestMapping(method = RequestMethod.GET)
     public List<User> userList() {
         return userServices.getUserList();

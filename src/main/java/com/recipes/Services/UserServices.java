@@ -21,6 +21,7 @@ public class UserServices implements IUserServices {
         if(!user.hasAllParameters()) {
             throw new IllegalArgumentException("All the parameters must not be nulls or empties");
         }
+        user.setId(generateId());
         userList.add(user);
     }
 
@@ -76,7 +77,7 @@ public class UserServices implements IUserServices {
         if(userList.size() == 0) {
             return 1;
         } else {
-            return userList.get(userList.size() - 1).getId();
+            return userList.get(userList.size() - 1).getId() + 1;
         }
     }
 }
