@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
-    private long id;
+    private int id;
     private String fullName;
     private String email;
     private String password;
@@ -15,18 +15,18 @@ public class User {
         this.password = "";
     }
 
-    public User(long id, String fullName, String email, String password) {
+    public User(int id, String fullName, String email, String password) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.password = password;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -63,7 +63,7 @@ public class User {
                 +"}";
     }
 
-    public boolean hasId(long otherId) {
+    public boolean hasId(int otherId) {
         return id == otherId;
     }
 

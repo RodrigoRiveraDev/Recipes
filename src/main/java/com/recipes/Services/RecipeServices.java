@@ -22,7 +22,7 @@ public class RecipeServices implements IRecipeServices {
     }
 
     @Override
-    public Recipe updateRecipeInfo(long id, Recipe dataToUpdate, long userId) {
+    public Recipe updateRecipeInfo(int id, Recipe dataToUpdate, int userId) {
         Recipe foundedRecipe = null;
         int index = recipeList.size();
         if(id < 0) {
@@ -46,8 +46,8 @@ public class RecipeServices implements IRecipeServices {
     }
 
     @Override
-    public void deleteRecipe(long userId, long recipeId) {
-        long foundedRecipeIndex = -1;
+    public void deleteRecipe(int userId, int recipeId) {
+        int foundedRecipeIndex = -1;
         int index = recipeList.size();
         if(recipeId < 0) {
             throw new IllegalArgumentException("Negative id is not valid");
@@ -61,7 +61,7 @@ public class RecipeServices implements IRecipeServices {
             throw new ResourceNotFoundException(Recipe.class, recipeId);
         }
 
-        Recipe foundedRecipe = recipeList.get((int)foundedRecipeIndex);
+        Recipe foundedRecipe = recipeList.get(foundedRecipeIndex);
 
         if(!foundedRecipe.isOwner(userId)) {
             throw new UnauthorizedException();
