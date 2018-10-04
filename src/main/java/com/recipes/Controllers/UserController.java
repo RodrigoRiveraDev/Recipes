@@ -1,7 +1,7 @@
 package com.recipes.Controllers;
 
 import java.util.List;
-import com.recipes.DTO.User;
+import com.recipes.DTO.UserDTO;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.IUserServices;
@@ -20,10 +20,10 @@ public class UserController {
     private IUserServices userServices;
 
     @RequestMapping(method = RequestMethod.POST)
-    public HttpEntity registerUser(@RequestBody User newUser) {
+    public HttpEntity registerUser(@RequestBody UserDTO newUserDTO) {
         try {
-            userServices.save(newUser);
-            return new ResponseEntity<>(newUser.toString(), HttpStatus.CREATED);
+            userServices.save(newUserDTO);
+            return new ResponseEntity<>(newUserDTO.toString(), HttpStatus.CREATED);
         } catch (IllegalArgumentException illegalArgumentException) {
             return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -32,8 +32,8 @@ public class UserController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public HttpEntity getUserById(@PathVariable int id) {
         try {
-            User foundedUser = userServices.findUserbyId(id);
-            return new ResponseEntity<>(foundedUser, HttpStatus.OK);
+            UserDTO foundedUserDTO = userServices.findUserbyId(id);
+            return new ResponseEntity<>(foundedUserDTO, HttpStatus.OK);
         } catch (IllegalArgumentException ilegalArugmentException) {
             return new ResponseEntity<>(ilegalArugmentException.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (ResourceNotFoundException resourceNotFoundException) {
@@ -42,10 +42,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public HttpEntity updateUser(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody User dataToUpdate) {
+    public HttpEntity updateUser(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody UserDTO dataToUpdate) {
         try {
-            User foundedUser = userServices.updateUserInfo(id, dataToUpdate, userId);
-            return new ResponseEntity<>(foundedUser, HttpStatus.CREATED);
+            UserDTO foundedUserDTO = userServices.updateUserInfo(id, dataToUpdate, userId);
+            return new ResponseEntity<>(foundedUserDTO, HttpStatus.CREATED);
         } catch (IllegalArgumentException ilegalArugmentException) {
             return new ResponseEntity<>(ilegalArugmentException.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (ResourceNotFoundException resourceNotFoundException) {
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<User> userList() {
+    public List<UserDTO> userList() {
         return userServices.getUserList();
     }
 }
