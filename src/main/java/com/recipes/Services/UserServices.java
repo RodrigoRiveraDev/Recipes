@@ -21,6 +21,7 @@ public class UserServices implements IUserServices {
         if(!user.hasAllParameters()) {
             throw new IllegalArgumentException("All the parameters must not be nulls or empties");
         }
+        user.setId(generateId());
         userList.add(user);
     }
 
@@ -30,7 +31,7 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public User findUserbyId(long id) {
+    public User findUserbyId(int id) {
         User foundedUser = null;
         int index = userList.size();
         if(id < 0) {
@@ -49,7 +50,7 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public User updateUserInfo(long id, User dataToUpdate, int userId) {
+    public User updateUserInfo(int id, User dataToUpdate, int userId) {
         User foundedUser = null;
         int index = userList.size();
         if(id < 0) {
@@ -70,5 +71,13 @@ public class UserServices implements IUserServices {
 
         foundedUser.updateInfo(dataToUpdate);
         return foundedUser;
+    }
+
+    private int generateId() {
+        if(userList.size() == 0) {
+            return 1;
+        } else {
+            return userList.get(userList.size() - 1).getId() + 1;
+        }
     }
 }

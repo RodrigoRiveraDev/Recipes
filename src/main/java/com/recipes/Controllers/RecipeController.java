@@ -31,7 +31,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public HttpEntity updateRecipe(@RequestHeader(value="userId") long userId, @PathVariable long id, @RequestBody Recipe dataToUpdate) {
+    public HttpEntity updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody Recipe dataToUpdate) {
         try {
             Recipe updatedRecipe = recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
             return new ResponseEntity<>(updatedRecipe, HttpStatus.CREATED);
@@ -45,7 +45,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public HttpEntity deleteRecipe(@RequestHeader(value="userId") long userId, @PathVariable long id) {
+    public HttpEntity deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) {
         try {
             recipeServices.deleteRecipe(userId, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

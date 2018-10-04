@@ -5,7 +5,6 @@ import com.recipes.DTO.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.IUserServices;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -31,7 +30,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public HttpEntity getUserById(@PathVariable long id) {
+    public HttpEntity getUserById(@PathVariable int id) {
         try {
             User foundedUser = userServices.findUserbyId(id);
             return new ResponseEntity<>(foundedUser, HttpStatus.OK);
@@ -43,7 +42,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public HttpEntity updateUser(@RequestHeader(value="userId") int userId, @PathVariable long id, @RequestBody User dataToUpdate) {
+    public HttpEntity updateUser(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody User dataToUpdate) {
         try {
             User foundedUser = userServices.updateUserInfo(id, dataToUpdate, userId);
             return new ResponseEntity<>(foundedUser, HttpStatus.CREATED);
@@ -55,7 +54,6 @@ public class UserController {
             return new ResponseEntity<>(unauthorizedException.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
-
 
     @RequestMapping(method = RequestMethod.GET)
     public List<User> userList() {
