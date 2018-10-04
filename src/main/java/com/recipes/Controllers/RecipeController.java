@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/recipes")
 public class RecipeController {
 
-    @Autowired
     private IRecipeServices recipeServices;
+
+    @Autowired
+    public RecipeController(IRecipeServices recipeServices) {
+        this.recipeServices = recipeServices;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     public HttpEntity registerRecipe(@RequestBody Recipe newRecipe) {
