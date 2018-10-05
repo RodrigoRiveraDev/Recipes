@@ -31,7 +31,7 @@ public class UserServices implements IUserServices {
 
     @Override
     public List<UserDTO> getUserList() {
-        return null;//Factory.toUserDTOList(userRepository.allUsers());
+        return Factory.toUserDTOList(userRepository.allUsers());
     }
 
     @Override
