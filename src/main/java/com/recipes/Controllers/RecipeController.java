@@ -25,9 +25,9 @@ public class RecipeController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public HttpEntity registerRecipe(@RequestBody Recipe newRecipe) {
+    public HttpEntity registerRecipe(@RequestHeader(value="userId") int userId, @RequestBody Recipe newRecipe) {
         try {
-            recipeServices.save(newRecipe);
+            recipeServices.save(newRecipe, userId);
             return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
         } catch (IllegalArgumentException illegalArgumentException) {
             return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
@@ -38,7 +38,7 @@ public class RecipeController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public HttpEntity updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) {
         try {
-            RecipeDTO updatedRecipeDTO = recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
+            Recipe updatedRecipeDTO = recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
             return new ResponseEntity<>(updatedRecipeDTO, HttpStatus.CREATED);
         } catch (IllegalArgumentException illegalArgumentException) {
             return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
@@ -71,7 +71,7 @@ public class RecipeController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity getRecipeById(@PathVariable int id) {
         try {
-            RecipeDTO foundedRecipeDTO = recipeServices.getRecipeById(id);
+            Recipe foundedRecipeDTO = recipeServices.getRecipeById(id);
             return new ResponseEntity<>(foundedRecipeDTO, HttpStatus.OK);
         } catch (IllegalArgumentException illegalArgumentException) {
             return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);

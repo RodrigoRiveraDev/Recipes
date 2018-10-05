@@ -13,8 +13,7 @@ public class Recipe {
     private Long id;
     @NotEmpty
     private String howElaborate;
-    @ManyToOne
-    private User user;
+    private long userId;
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Ingredient> ingredients;
@@ -31,16 +30,24 @@ public class Recipe {
         this.howElaborate = howElaborate;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public Long getId() {
         return id;
     }
 
     public String getHowElaborate() {
         return howElaborate;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }
 

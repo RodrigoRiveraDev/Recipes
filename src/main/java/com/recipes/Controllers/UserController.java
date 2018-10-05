@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private IUserServices userServices;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public HttpEntity registerUser(@RequestBody UserDTO newUserDTO) {
         try {
             userServices.save(newUserDTO);
@@ -30,7 +30,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public HttpEntity getUserById(@PathVariable int id) {
         try {
             UserDTO foundedUserDTO = userServices.findUserbyId(id);

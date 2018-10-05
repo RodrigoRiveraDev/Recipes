@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface IRecipeServices {
 
-    void save(Recipe recipe);
+    void save(Recipe recipe, long userId);
 
     List<Recipe> getRecipeDTOList();
 
-    RecipeDTO updateRecipeInfo(int id, RecipeDTO dataToUpdate, int userId);
+    Recipe updateRecipeInfo(int id, RecipeDTO dataToUpdate, int userId);
 
     void deleteRecipe(int userId, int id);
 
-    RecipeDTO getRecipeById(int id);
+    Recipe getRecipeById(int id);
 }
