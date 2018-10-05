@@ -1,7 +1,8 @@
 package com.recipes.Controllers;
 
 import java.util.List;
-import com.recipes.DTO.Recipe;
+import com.recipes.DTO.RecipeDTO;
+import com.recipes.Entities.Recipe;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.IRecipeServices;
@@ -35,10 +36,10 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public HttpEntity updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody Recipe dataToUpdate) {
+    public HttpEntity updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) {
         try {
-            Recipe updatedRecipe = recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
-            return new ResponseEntity<>(updatedRecipe, HttpStatus.CREATED);
+            RecipeDTO updatedRecipeDTO = recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
+            return new ResponseEntity<>(updatedRecipeDTO, HttpStatus.CREATED);
         } catch (IllegalArgumentException illegalArgumentException) {
             return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (ResourceNotFoundException resourceNotFoundException) {
@@ -64,14 +65,14 @@ public class RecipeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Recipe> recipeList() {
-        return recipeServices.getRecipeList();
+        return recipeServices.getRecipeDTOList();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity getRecipeById(@PathVariable int id) {
         try {
-            Recipe foundedRecipe = recipeServices.getRecipeById(id);
-            return new ResponseEntity<>(foundedRecipe, HttpStatus.OK);
+            RecipeDTO foundedRecipeDTO = recipeServices.getRecipeById(id);
+            return new ResponseEntity<>(foundedRecipeDTO, HttpStatus.OK);
         } catch (IllegalArgumentException illegalArgumentException) {
             return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (ResourceNotFoundException resourceNotFoundException) {

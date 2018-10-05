@@ -2,19 +2,19 @@ package com.recipes.DTO;
 
 import java.util.List;
 
-public class Recipe {
+public class RecipeDTO {
 
     private int id;
     private List<Ingredient> ingredients;
     private String howElaborate;
     private int userId;
 
-    public Recipe() {
+    public RecipeDTO() {
         ingredients = null;
         howElaborate = "";
     }
 
-    public Recipe(List<Ingredient> ingredients, String howElaborate) {
+    public RecipeDTO(List<Ingredient> ingredients, String howElaborate) {
         this.ingredients = ingredients;
         this.howElaborate = howElaborate;
     }
@@ -60,7 +60,7 @@ public class Recipe {
         return this.id == id;
     }
 
-    public void updateInfo(Recipe dataToUpdate) {
+    public void updateInfo(RecipeDTO dataToUpdate) {
         if(!dataToUpdate.getHowElaborate().isEmpty()) {
             this.howElaborate = dataToUpdate.getHowElaborate();
         }
@@ -75,7 +75,7 @@ public class Recipe {
 
     @Override
     public boolean equals(Object obj) {
-        Recipe other = (Recipe) obj;
+        RecipeDTO other = (RecipeDTO) obj;
         return  this.howElaborate.equals(other.howElaborate) &&
                 this.ingredients.equals(other.ingredients) &&
                 this.id == other.getId();

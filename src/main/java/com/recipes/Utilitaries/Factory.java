@@ -1,6 +1,7 @@
 package com.recipes.Utilitaries;
 
 import com.recipes.DTO.UserDTO;
+import com.recipes.Entities.Recipe;
 import com.recipes.Entities.User;
 
 import java.util.ArrayList;
@@ -22,4 +23,5 @@ public class Factory {
         }
         return userDTOS;
     }
+
 }
