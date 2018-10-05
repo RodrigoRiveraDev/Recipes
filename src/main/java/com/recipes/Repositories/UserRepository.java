@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    //@Query("SELECT u FROM User u WHERE u.id = :id")
     User findById(@Param("id") long id);
 
     @Query("SELECT u FROM User u")
