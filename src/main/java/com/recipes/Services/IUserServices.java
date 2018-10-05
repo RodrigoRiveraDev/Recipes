@@ -1,16 +1,17 @@
 package com.recipes.Services;
 
-import com.recipes.DTO.User;
+import com.recipes.DTO.UserDTO;
+import com.recipes.Entities.User;
 
 import java.util.List;
 
 public interface IUserServices {
 
-    public void save(User user);
+    public void save(UserDTO userDTO);
 
     public List<User> getUserList();
 
-    public User findUserbyId(int id);
+    public UserDTO findUserbyId(long id);
 
-    public User updateUserInfo(int id, User dataToUpdate, int userId);
+    public UserDTO updateUserInfo(int id, UserDTO dataToUpdate, int userId);
 }
