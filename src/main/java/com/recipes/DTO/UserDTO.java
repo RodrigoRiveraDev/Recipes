@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
-    private int id;
+    private long id;
     private String fullName;
     private String email;
     private String password;
@@ -15,18 +15,18 @@ public class UserDTO {
         this.password = "";
     }
 
-    public UserDTO(int id, String fullName, String email, String password) {
+    public UserDTO(long id, String fullName, String email, String password) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.password = password;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

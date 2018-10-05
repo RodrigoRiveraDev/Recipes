@@ -2,6 +2,7 @@ package com.recipes.Controllers;
 
 import java.util.List;
 import com.recipes.DTO.UserDTO;
+import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.IUserServices;
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<UserDTO> userList() {
+    public List<User> userList() {
         return userServices.getUserList();
     }
 }

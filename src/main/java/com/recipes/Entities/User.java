@@ -4,15 +4,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
+    @NotEmpty
     private String fullName;
+    @NotEmpty
     private String password;
+    @NotEmpty
     private String email;
 
     public User() {}
@@ -54,4 +58,5 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
+
 }
