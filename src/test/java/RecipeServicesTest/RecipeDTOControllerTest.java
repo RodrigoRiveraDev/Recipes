@@ -1,23 +1,10 @@
 package RecipeServicesTest;
 
-import com.recipes.Controllers.RecipeController;
-import com.recipes.DTO.Ingredient;
-import com.recipes.DTO.Recipe;
-import com.recipes.Services.RecipeServices;
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RunWith(SpringRunner.class)
-public class RecipeControllerTest {
+public class RecipeDTOControllerTest {
     /*
     @TestConfiguration
     static class RecipeServiceImplTestContextConfiguration {
@@ -43,23 +30,23 @@ public class RecipeControllerTest {
     public void addNewRecipe() {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         int savedRecipes;
         HttpEntity re = recipeController.registerRecipe(newRecipe);
-        Recipe postReturn = (Recipe)re.getBody();
+        RecipeDTO postReturn = (RecipeDTO)re.getBody();
         savedRecipes = recipeController.recipeList().size();
         Assert.assertTrue(postReturn.equals(newRecipe));
     }
 
     @Test
     public void addNewRecipeThrowsIllegalArgumentException()  {
-        HttpEntity response = recipeController.registerRecipe(new Recipe());
+        HttpEntity response = recipeController.registerRecipe(new RecipeDTO());
         Assert.assertTrue(response.getBody().equals("All the parameters must not be nulls or empties"));
     }
 
     @Test
     public void updateRecipeThrowsIllegalArgumentException()  {
-        HttpEntity response = recipeController.updateRecipe(4, -1, new Recipe());
+        HttpEntity response = recipeController.updateRecipe(4, -1, new RecipeDTO());
         Assert.assertTrue(response.getBody().equals("Negative id is not valid"));
     }
 
@@ -67,20 +54,20 @@ public class RecipeControllerTest {
     public void updateRecipeThrowsResourceNotFoundException()  {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         HttpEntity response = recipeController.updateRecipe(4,9, newRecipe);
-        Assert.assertTrue(response.getBody().equals("The Recipe with id " + 9 + " was not found"));
+        Assert.assertTrue(response.getBody().equals("The RecipeDTO with id " + 9 + " was not found"));
     }
 
     @Test
     public void updateRecipeThrowsUnauthorizedException() {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         newRecipe.setUserId(2);
         recipeController.registerRecipe(newRecipe);
-        Recipe updateInfo = new Recipe(new ArrayList<Ingredient>(), "new step");
+        RecipeDTO updateInfo = new RecipeDTO(new ArrayList<Ingredient>(), "new step");
         HttpEntity response = recipeController.updateRecipe(4, 1, updateInfo);
         Assert.assertTrue(response.getBody().equals("You don't have the permission to execute this action"));
     }
@@ -89,12 +76,12 @@ public class RecipeControllerTest {
     public void updateRecipe() {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         newRecipe.setUserId(4);
         recipeController.registerRecipe(newRecipe);
-        Recipe updateInfo = new Recipe(new ArrayList<Ingredient>(), "new step");
-        Recipe updatedRecipe = (Recipe) recipeController.updateRecipe(4,1, updateInfo).getBody();
+        RecipeDTO updateInfo = new RecipeDTO(new ArrayList<Ingredient>(), "new step");
+        RecipeDTO updatedRecipe = (RecipeDTO) recipeController.updateRecipe(4,1, updateInfo).getBody();
         updateInfo.setId(1);
         updateInfo.setIngredients(ingredients);
         Assert.assertTrue(updatedRecipe.equals(updateInfo));
@@ -104,7 +91,7 @@ public class RecipeControllerTest {
     public void deleteRecipe() {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         newRecipe.setUserId(2);
         recipeController.registerRecipe(newRecipe);
@@ -118,7 +105,7 @@ public class RecipeControllerTest {
     public void deleteRecipeThrowsUnauthorizedException() {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         newRecipe.setUserId(2);
         recipeController.registerRecipe(newRecipe);
@@ -130,7 +117,7 @@ public class RecipeControllerTest {
     public void deleteRecipeThrowsIllegalArgumentException() {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         recipeController.registerRecipe(newRecipe);
         HttpEntity response = recipeController.deleteRecipe(1, -1);
@@ -141,23 +128,23 @@ public class RecipeControllerTest {
     public void deleteRecipeThrowsResourceNotFoundException()  {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         recipeController.registerRecipe(newRecipe);
         HttpEntity response = recipeController.deleteRecipe(1, 5);
-        Assert.assertTrue(response.getBody().equals("The Recipe with id " + 5 + " was not found"));
+        Assert.assertTrue(response.getBody().equals("The RecipeDTO with id " + 5 + " was not found"));
     }
 
     @Test
     public void findRecipeById() {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         newRecipe.setUserId(2);
         recipeController.registerRecipe(newRecipe);
         HttpEntity response = recipeController.getRecipeById(1);
-        Recipe foundedRecipe = (Recipe) response.getBody();
+        RecipeDTO foundedRecipe = (RecipeDTO) response.getBody();
         Assert.assertTrue(foundedRecipe.equals(newRecipe));
     }
 
@@ -165,7 +152,7 @@ public class RecipeControllerTest {
     public void findRecipeByIdThrowsIllegalArgumentException() {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         recipeController.registerRecipe(newRecipe);
         HttpEntity response = recipeController.getRecipeById(-1);
@@ -176,10 +163,10 @@ public class RecipeControllerTest {
     public void findRecipeByIdThrowsResourceNotFoundException()  {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(new Ingredient());
-        Recipe newRecipe = new Recipe(ingredients, "steps");
+        RecipeDTO newRecipe = new RecipeDTO(ingredients, "steps");
         newRecipe.setId(1);
         recipeController.registerRecipe(newRecipe);
         HttpEntity response = recipeController.getRecipeById(9);
-        Assert.assertTrue(response.getBody().equals("The Recipe with id " + 9 + " was not found"));
+        Assert.assertTrue(response.getBody().equals("The RecipeDTO with id " + 9 + " was not found"));
     }*/
 }
