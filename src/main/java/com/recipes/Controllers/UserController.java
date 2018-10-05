@@ -20,6 +20,11 @@ public class UserController {
     @Autowired
     private IUserServices userServices;
 
+    /**
+     *
+     * @param newUserDTO
+     * @return
+     */
     @PostMapping
     public HttpEntity registerUser(@RequestBody UserDTO newUserDTO) {
         try {
@@ -30,6 +35,11 @@ public class UserController {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @GetMapping(value = "/{id}")
     public HttpEntity getUserById(@PathVariable int id) {
         try {
@@ -42,6 +52,13 @@ public class UserController {
         }
     }
 
+    /**
+     *
+     * @param userId
+     * @param id
+     * @param dataToUpdate
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public HttpEntity updateUser(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody UserDTO dataToUpdate) {
         try {
@@ -56,6 +73,10 @@ public class UserController {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public List<User> userList() {
         return userServices.getUserList();

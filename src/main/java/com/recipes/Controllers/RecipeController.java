@@ -24,6 +24,12 @@ public class RecipeController {
         this.recipeServices = recipeServices;
     }
 
+    /**
+     *
+     * @param userId
+     * @param newRecipe
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST)
     public HttpEntity registerRecipe(@RequestHeader(value="userId") int userId, @RequestBody Recipe newRecipe) {
         try {
@@ -35,6 +41,13 @@ public class RecipeController {
 
     }
 
+    /**
+     *
+     * @param userId
+     * @param id
+     * @param dataToUpdate
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public HttpEntity updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) {
         try {
@@ -49,6 +62,12 @@ public class RecipeController {
         }
     }
 
+    /**
+     *
+     * @param userId
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public HttpEntity deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) {
         try {
@@ -63,11 +82,20 @@ public class RecipeController {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public List<Recipe> recipeList() {
         return recipeServices.getRecipeDTOList();
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity getRecipeById(@PathVariable int id) {
         try {
