@@ -17,9 +17,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
     private IUserServices userServices;
 
+    @Autowired
+    public UserController(IUserServices userServices) {
+        this.userServices = userServices;
+    }
+
+    /**
+     * This endpoint is to add a new User
+     * @param newUserDTO The User object with the needed information (full name, password, email)
+     * @return This will return a JSON with the created User object or an exception
+     */
     @PostMapping
     public HttpEntity registerUser(@RequestBody UserDTO newUserDTO) {
         try {
@@ -30,6 +39,11 @@ public class UserController {
         }
     }
 
+    /**
+     * This end point is to retrieve an User object by its id
+     * @param id The user id
+     * @return This will return a JSON with the User object or an exception
+     */
     @GetMapping(value = "/{id}")
     public HttpEntity getUserById(@PathVariable int id) {
         try {
@@ -42,7 +56,14 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    /**
+     * This endpoint is to update a registered User
+     * @param userId The user id that is updating the user
+     * @param id The user id to update the information
+     * @param dataToUpdate The object with the desired information to update (full name, password, email)
+     * @return This will return a JSON with the modified User object or an exception
+     */
+    @PutMapping(value = "/{id}")
     public HttpEntity updateUser(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody UserDTO dataToUpdate) {
         try {
             UserDTO foundedUserDTO = userServices.updateUserInfo(id, dataToUpdate, userId);
@@ -56,7 +77,11 @@ public class UserController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    /**
+     * This endpoint is to retrieve a list with all the registered users
+     * @return This will return a JSON with all the registered users list
+     */
+    @GetMapping
     public List<User> userList() {
         return userServices.getUserList();
     }

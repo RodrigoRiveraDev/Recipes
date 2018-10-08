@@ -24,7 +24,13 @@ public class RecipeController {
         this.recipeServices = recipeServices;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    /**
+     * This endpoint is to add a new Recipe
+     * @param userId The user id that is registering the Recipe
+     * @param newRecipe The Recipe object with the needed information (steps to elaborate it and ingredients list)
+     * @return This will return a JSON with the created Recipe object or an exception
+     */
+    @PostMapping
     public HttpEntity registerRecipe(@RequestHeader(value="userId") int userId, @RequestBody Recipe newRecipe) {
         try {
             recipeServices.save(newRecipe, userId);
@@ -35,7 +41,14 @@ public class RecipeController {
 
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    /**
+     * This endpoint is to update a registered Recipe
+     * @param userId The user id that is updating the Recipe
+     * @param id The recipe id
+     * @param dataToUpdate The object with the desired information to update (steps to elaborate it and ingredients list)
+     * @return This will return a JSON with the the modified Recipe object  or an exception
+     */
+    @PutMapping(value = "/{id}")
     public HttpEntity updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) {
         try {
             Recipe updatedRecipeDTO = recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
@@ -49,7 +62,13 @@ public class RecipeController {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    /**
+     * This endpoint is to delete a registered Recipe
+     * @param userId The user id that is deleting the Recipe
+     * @param id The recipe id
+     * @return This will return an empty JSON or an exception
+     */
+    @DeleteMapping(value = "/{id}")
     public HttpEntity deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) {
         try {
             recipeServices.deleteRecipe(userId, id);
@@ -63,12 +82,21 @@ public class RecipeController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    /**
+     * This endpoint is to retrieve a list wih all the registered Recipes
+     * @return This will return a JSON with all the registered recipes list
+     */
+    @GetMapping
     public List<Recipe> recipeList() {
         return recipeServices.getRecipeDTOList();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    /**
+     * This endpoint is to retrieve a registered Recipe by its id
+     * @param id The recipe id
+     * @return This will return a JSON with the Recipe information or an exception
+     */
+    @GetMapping(value = "/{id}")
     public ResponseEntity getRecipeById(@PathVariable int id) {
         try {
             Recipe foundedRecipeDTO = recipeServices.getRecipeById(id);
