@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
     private IUserServices userServices;
+
+    @Autowired
+    public UserController(IUserServices userServices) {
+        this.userServices = userServices;
+    }
 
     /**
      * This endpoint is to add a new User
@@ -59,7 +63,7 @@ public class UserController {
      * @param dataToUpdate The object with the desired information to update (full name, password, email)
      * @return This will return a JSON with the modified User object or an exception
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PutMapping(value = "/{id}")
     public HttpEntity updateUser(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody UserDTO dataToUpdate) {
         try {
             UserDTO foundedUserDTO = userServices.updateUserInfo(id, dataToUpdate, userId);
@@ -77,7 +81,7 @@ public class UserController {
      * This endpoint is to retrieve a list with all the registered users
      * @return This will return a JSON with all the registered users list
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public List<User> userList() {
         return userServices.getUserList();
     }

@@ -30,7 +30,7 @@ public class RecipeController {
      * @param newRecipe The Recipe object with the needed information (steps to elaborate it and ingredients list)
      * @return This will return a JSON with the created Recipe object or an exception
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public HttpEntity registerRecipe(@RequestHeader(value="userId") int userId, @RequestBody Recipe newRecipe) {
         try {
             recipeServices.save(newRecipe, userId);
@@ -48,7 +48,7 @@ public class RecipeController {
      * @param dataToUpdate The object with the desired information to update (steps to elaborate it and ingredients list)
      * @return This will return a JSON with the the modified Recipe object  or an exception
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PutMapping(value = "/{id}")
     public HttpEntity updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) {
         try {
             Recipe updatedRecipeDTO = recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
@@ -68,7 +68,7 @@ public class RecipeController {
      * @param id The recipe id
      * @return This will return an empty JSON or an exception
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public HttpEntity deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) {
         try {
             recipeServices.deleteRecipe(userId, id);
@@ -86,7 +86,7 @@ public class RecipeController {
      * This endpoint is to retrieve a list wih all the registered Recipes
      * @return This will return a JSON with all the registered recipes list
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public List<Recipe> recipeList() {
         return recipeServices.getRecipeDTOList();
     }
@@ -96,7 +96,7 @@ public class RecipeController {
      * @param id The recipe id
      * @return This will return a JSON with the Recipe information or an exception
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public ResponseEntity getRecipeById(@PathVariable int id) {
         try {
             Recipe foundedRecipeDTO = recipeServices.getRecipeById(id);
