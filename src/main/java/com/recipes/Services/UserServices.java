@@ -21,8 +21,8 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public void save(UserDTO user) {
-        userRepository.save(Factory.toUser(user));
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public UserDTO updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId) {
+    public User updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId) {
         if(userIdToUpdate == requestUserId) {
             User foundUser = userRepository.findById(userIdToUpdate);
             if(!dataToUpdate.getEmail().isEmpty()) {
@@ -49,7 +49,7 @@ public class UserServices implements IUserServices {
                 foundUser.setFullName(dataToUpdate.getFullName());
             }
             userRepository.save(foundUser);
-            return Factory.toUserDTO(foundUser);
+            return foundUser;
         } else {
             throw new UnauthorizedException();
         }

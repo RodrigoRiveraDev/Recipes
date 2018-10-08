@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IRecipeServices {
 
-    void save(Recipe recipe, long userId);
+    Recipe save(Recipe recipe, long userId);
 
     List<Recipe> getRecipeDTOList();
 

@@ -23,13 +23,13 @@ public class RecipeServices implements IRecipeServices {
     }
 
     @Override
-    public void save(Recipe recipe, long userId) {
+    public Recipe save(Recipe recipe, long userId) {
         User user = userServices.findUserbyId(userId);
         if(user != null) {
             user.setId(userId);
             recipe.setUserId(userId);
         }
-        recipeRepository.save(recipe);
+        return recipeRepository.save(recipe);
     }
 
     @Override

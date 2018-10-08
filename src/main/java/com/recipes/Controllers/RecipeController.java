@@ -3,14 +3,9 @@ package com.recipes.Controllers;
 import java.util.List;
 import com.recipes.DTO.RecipeDTO;
 import com.recipes.Entities.Recipe;
-import com.recipes.Exceptions.ResourceNotFoundException;
-import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.IRecipeServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,14 +26,8 @@ public class RecipeController {
      * @return This will return a JSON with the created Recipe object or an exception
      */
     @PostMapping
-    public HttpEntity registerRecipe(@RequestHeader(value="userId") int userId, @RequestBody Recipe newRecipe) {
-        try {
-            recipeServices.save(newRecipe, userId);
-            return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-
+    public Recipe registerRecipe(@RequestHeader(value="userId") int userId, @RequestBody Recipe newRecipe) {
+        return recipeServices.save(newRecipe, userId);
     }
 
     /**
@@ -49,17 +38,8 @@ public class RecipeController {
      * @return This will return a JSON with the the modified Recipe object  or an exception
      */
     @PutMapping(value = "/{id}")
-    public HttpEntity updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) {
-        try {
-            Recipe updatedRecipeDTO = recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
-            return new ResponseEntity<>(updatedRecipeDTO, HttpStatus.CREATED);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException resourceNotFoundException) {
-            return new ResponseEntity<>(resourceNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (UnauthorizedException unauthorizedException) {
-            return new ResponseEntity<>(unauthorizedException.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
+    public Recipe updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) {
+        return recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
     }
 
     /**
@@ -69,17 +49,8 @@ public class RecipeController {
      * @return This will return an empty JSON or an exception
      */
     @DeleteMapping(value = "/{id}")
-    public HttpEntity deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) {
-        try {
-            recipeServices.deleteRecipe(userId, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException resourceNotFoundException) {
-            return new ResponseEntity<>(resourceNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (UnauthorizedException unauthorizedException) {
-            return new ResponseEntity<>(unauthorizedException.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
+    public void deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) {
+        recipeServices.deleteRecipe(userId, id);
     }
 
     /**
@@ -97,15 +68,8 @@ public class RecipeController {
      * @return This will return a JSON with the Recipe information or an exception
      */
     @GetMapping(value = "/{id}")
-    public ResponseEntity getRecipeById(@PathVariable int id) {
-        try {
-            Recipe foundedRecipeDTO = recipeServices.getRecipeById(id);
-            return new ResponseEntity<>(foundedRecipeDTO, HttpStatus.OK);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException resourceNotFoundException) {
-            return new ResponseEntity<>(resourceNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public Recipe getRecipeById(@PathVariable int id) {
+        return recipeServices.getRecipeById(id);
     }
 
 }
