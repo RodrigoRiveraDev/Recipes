@@ -49,10 +49,11 @@ public class RecipeServices implements IRecipeServices {
 
     @Override
     public void deleteRecipe(int userId, int recipeId) {
-        Recipe recipe = recipeRepository.findById(userId);
+        recipeRepository.delete(recipeId, userId);
+        /*Recipe recipe = recipeRepository.findById(userId);
         if(recipe != null && recipe.getUserId() == recipeId) {
             recipeRepository.delete(recipe);
-        }
+        }*/
     }
 
     @Override
