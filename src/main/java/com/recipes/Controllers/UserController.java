@@ -7,6 +7,7 @@ import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.IUserServices;
 
+import com.recipes.Utilitaries.Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -45,15 +46,16 @@ public class UserController {
      * @return This will return a JSON with the User object or an exception
      */
     @GetMapping(value = "/{id}")
-    public HttpEntity getUserById(@PathVariable int id) {
-        try {
+    public User getUserById(@PathVariable int id) {
+        return userServices.findUserbyId(id);
+        /*try {
             UserDTO foundedUserDTO = userServices.findUserbyId(id);
             return new ResponseEntity<>(foundedUserDTO, HttpStatus.OK);
         } catch (IllegalArgumentException ilegalArugmentException) {
             return new ResponseEntity<>(ilegalArugmentException.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (ResourceNotFoundException resourceNotFoundException) {
             return new ResponseEntity<>(resourceNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        }*/
     }
 
     /**

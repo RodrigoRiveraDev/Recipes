@@ -31,8 +31,8 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public UserDTO findUserbyId(long id) {
-        return Factory.toUserDTO(userRepository.findById(id));
+    public User findUserbyId(long id) {
+        return userRepository.findById(id);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class RecipeServices implements IRecipeServices {
 
     @Override
     public void save(Recipe recipe, long userId) {
-        User user = Factory.toUser(userServices.findUserbyId(userId));
+        User user = userServices.findUserbyId(userId);
         if(user != null) {
             user.setId(userId);
             recipe.setUserId(userId);
