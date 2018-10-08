@@ -1,19 +1,62 @@
 package UserTests;
 
 import com.recipes.Controllers.UserController;
-import com.recipes.DTO.UserDTO;
+import com.recipes.Entities.User;
+import com.recipes.Repositories.UserRepository;
 import com.recipes.Services.UserServices;
-import org.junit.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
-public class UserDTOControllerTest {
+@WebMvcTest(value = UserController.class, secure = false)
+public class UserControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private UserServices userServices;
+
+    @Test
+    public void retrieveAllUsers() throws Exception{
+        List<User> usersList = new ArrayList<>();
+        User user = new User("fullName", "password", "email");
+        user.setId(Long.parseLong("1"));
+        usersList.add(user);
+
+        BDDMockito.given(userServices.getUserList()).willReturn(usersList);
+
+        /**Mockito.when(
+          userServices.getUserList()
+        ).thenReturn(usersList);**/
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users").
+                accept(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        String expected = "[{id:1, fullName:fullName, password:password, email:email}]";
+        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
+        //mockMvc.perform(requestBuilder).andExpect(status().isOk)
+    }
+
     /*
     @TestConfiguration
     static class UsersServiceImplTestContextConfiguration {
