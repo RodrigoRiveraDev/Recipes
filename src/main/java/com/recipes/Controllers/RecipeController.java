@@ -45,7 +45,7 @@ public class RecipeController {
      * This endpoint is to update a registered Recipe
      * @param userId The user id that is updating the Recipe
      * @param id The recipe id
-     * @param dataToUpdate The information with the desired information to update (steps to elaborate it and ingredients list)
+     * @param dataToUpdate The object with the desired information to update (steps to elaborate it and ingredients list)
      * @return This will return a JSON with the the modified Recipe object  or an exception
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -84,7 +84,7 @@ public class RecipeController {
 
     /**
      * This endpoint is to retrieve a list wih all the registered Recipes
-     * @return
+     * @return This will return a JSON with all the registered recipes list
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Recipe> recipeList() {
