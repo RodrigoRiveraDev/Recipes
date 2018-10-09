@@ -1,111 +1,149 @@
 package UserTests;
 
-import com.recipes.Controllers.UserController;
-import com.recipes.DTO.User;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.hamcrest.Matchers.is;
+
+import com.recipes.Application;
+import com.recipes.DTO.UserDTO;
+import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.UserServices;
-import com.sun.deploy.net.HttpResponse;
-import org.junit.Assert;
+import org.hamcrest.Matchers;
+import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
 public class UserControllerTest {
 
-    @TestConfiguration
-    static class UsersServiceImplTestContextConfiguration {
-
-        @Bean
-        public UserServices usersService() {
-            return new UserServices();
-        }
-
-        @Bean
-        public UserController userController() {
-            return new UserController();
-        }
-    }
-
     @Autowired
-    private UserServices usersService;
+    WebApplicationContext webApplicationContext;
 
-    @Autowired
-    private UserController userController;
+    private MockMvc mockMvc;
 
-    @Test
-    public void addNewUser() {
-        User newUser = new User(1, "fullName", "email", "password");
-        int originalSavedUsers = userController.userList().size();
-        userController.registerUser(newUser);
-        int newSavedUsers = userController.userList().size();
-        Assert.assertTrue(newSavedUsers == originalSavedUsers + 1);
+    @MockBean
+    private UserServices userServices;
+
+    @Before
+    public void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
-    public void addNewUserThrowsException()  {
-        User newUser = new User();
-        HttpEntity response = userController.registerUser(newUser);
-        Assert.assertTrue(response.getBody().equals("All the parameters must not be nulls or empties"));
+    public void shouldReturnDefaultList() throws Exception {
+        User user = new User("fullName", "password", "a@a.com");
+        List<User> allUsers = Arrays.asList(user);
+
+        BDDMockito.given(userServices.getUserList()).willReturn(allUsers);
+
+        mockMvc.perform(get("/users")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(jsonPath("$[0].fullName", is(user.getFullName())));
     }
 
     @Test
-    public void findUserbyId()  {
-        User newUser = new User(1, "fullName", "email", "password");
-        userController.registerUser(newUser);
-        HttpEntity<User> response = userController.getUserById(1);
-        User foundedUser = response.getBody();
-        Assert.assertTrue(foundedUser.toString().equals(newUser.toString()));
+    public void shouldAddNewUser() throws Exception {
+        User user = new User("fullName", "password", "a@a.com");
+        user.setId(1);
+
+        JSONObject bodyAsJson = new JSONObject();
+        bodyAsJson.put("fullName", user.getFullName());
+        bodyAsJson.put("password", user.getPassword());
+        bodyAsJson.put("email", user.getEmail());
+
+        Mockito.when(userServices.save(Mockito.any(User.class))).thenReturn(user);
+
+        mockMvc.perform(post("/users").contentType(APPLICATION_JSON)
+                .content(bodyAsJson.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fullName", is(user.getFullName())));
     }
 
     @Test
-    public void findUserbyIdThrowsIllegalArgumentException()  {
-        HttpEntity response = userController.getUserById(-1);
-        Assert.assertTrue(response.getBody().equals("Negative id is not valid"));
+    public void shouldUpdateUser() throws Exception {
+        User user = new User("fullName", "password", "a@a.com");
+        user.setId(1);
+
+        User updatedUser = new User("newFullName", "password", "a@a.com");
+
+        JSONObject bodyAsJson = new JSONObject();
+        bodyAsJson.put("fullName", updatedUser.getFullName());
+        bodyAsJson.put("password", "");
+        bodyAsJson.put("email", "");
+
+        Mockito.when(userServices.updateUserInfo(Mockito.anyInt(), Mockito.any(UserDTO.class), Mockito.anyInt())).thenReturn(updatedUser);
+
+        mockMvc.perform(put("/users/"+user.getId()).contentType(APPLICATION_JSON)
+                .content(bodyAsJson.toString()).header("userId", user.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fullName", is(updatedUser.getFullName())))
+                .andExpect(jsonPath("$.password", is(updatedUser.getPassword())))
+                .andExpect(jsonPath("$.email", is(updatedUser.getEmail())));
     }
 
     @Test
-    public void findUserbyIdThrowsResourceNotFoundException()  {
-        HttpEntity response = userController.getUserById(0);
-        Assert.assertTrue(response.getBody().equals("The User with id " + 0 + " was not found"));
+    public void shouldNotUpdateUserUnauthorizedException() throws Exception {
+        User user = new User("fullName", "password", "a@a.com");
+        user.setId(1);
+
+        User updatedUser = new User("newFullName", "password", "a@a.com");
+
+        JSONObject bodyAsJson = new JSONObject();
+        bodyAsJson.put("fullName", updatedUser.getFullName());
+        bodyAsJson.put("password", "");
+        bodyAsJson.put("email", "");
+
+        Mockito.when(userServices.updateUserInfo(Mockito.anyInt(), Mockito.any(UserDTO.class), Mockito.anyInt()))
+                .thenThrow(new UnauthorizedException());
+
+        mockMvc.perform(put("/users/1").contentType(APPLICATION_JSON)
+                .content(bodyAsJson.toString()).header("userId", 2))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void updateUser()  {
-        User newUser = new User(1, "fullName", "email", "password");
-        userController.registerUser(newUser);
-        User updateInfo = new User(1, "NewfullName", "Newemail", "password");
-        HttpEntity<User> response = userController.updateUser(1,1, updateInfo);
-        User updatedUser = response.getBody();
-        Assert.assertTrue(updatedUser.toString().equals(updateInfo.toString()));
+    public void shouldGetUserById() throws Exception {
+        User user = new User("fullName", "password", "a@a.com");
+        user.setId(1);
+
+        Mockito.when(userServices.findUserById(Mockito.anyLong())).thenReturn(user);
+
+        mockMvc.perform(get("/users/"+user.getId()).contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fullName", is(user.getFullName())))
+                .andExpect(jsonPath("$.password", is(user.getPassword())))
+                .andExpect(jsonPath("$.email", is(user.getEmail())));
     }
 
     @Test
-    public void updateUserThrowsIllegalArgumentException()  {
-        HttpEntity response = userController.updateUser(1, -1, new User());
-        Assert.assertTrue(response.getBody().equals("Negative id is not valid"));
-    }
+    public void shouldGetUserByIdNotFound() throws Exception {
+        Mockito.when(userServices.findUserById(Mockito.anyLong()))
+                .thenThrow(new ResourceNotFoundException(User.class, 1));
 
-    @Test
-    public void updateUserThrowsResourceNotFoundException()  {
-        HttpEntity response = userController.updateUser(1, 0, new User());
-        Assert.assertTrue(response.getBody().equals("The User with id " + 0 + " was not found"));
-    }
-
-    @Test
-    public void updateUserThrowsUnauthorizedException() {
-        User newUser = new User(1, "fullName", "email", "password");
-        userController.registerUser(newUser);
-        User updateInfo = new User(1, "NewfullName", "Newemail", "password");
-        HttpEntity response = userController.updateUser(3,1, updateInfo);
-        Assert.assertTrue(response.getBody().equals("You don't have the permission to execute this action"));
+        mockMvc.perform(get("/users/1").contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

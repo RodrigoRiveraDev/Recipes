@@ -1,74 +1,61 @@
 package com.recipes.Services;
 
-import com.recipes.DTO.User;
+import com.recipes.DTO.UserDTO;
+import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
+import com.recipes.Repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserServices implements IUserServices {
-    private List<User> userList;
 
-    public UserServices() {
-        userList = new ArrayList<>();
+    private UserRepository userRepository;
+
+    @Autowired
+    public UserServices(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public void save(User user) {
-        if(!user.hasAllParameters()) {
-            throw new IllegalArgumentException("All the parameters must not be nulls or empties");
-        }
-        userList.add(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Override
     public List<User> getUserList() {
-        return userList;
+        return userRepository.allUsers();
     }
 
     @Override
-    public User findUserbyId(long id) {
-        User foundedUser = null;
-        int index = userList.size();
-        if(id < 0) {
-            throw new IllegalArgumentException("Negative id is not valid");
-        }
-
-        while(foundedUser == null && --index >= 0) {
-            foundedUser = (userList.get(index).hasId(id)) ? userList.get(index) : null;
-        }
-
-        if(foundedUser == null) {
+    public User findUserById(long id) throws Exception {
+        User foundUser = userRepository.findById(id);
+        if(foundUser == null) {
             throw new ResourceNotFoundException(User.class, id);
         }
-
-        return foundedUser;
+        return foundUser;
     }
 
     @Override
-    public User updateUserInfo(long id, User dataToUpdate, int userId) {
-        User foundedUser = null;
-        int index = userList.size();
-        if(id < 0) {
-            throw new IllegalArgumentException("Negative id is not valid");
-        }
-
-        while(foundedUser == null && --index >= 0) {
-            foundedUser = (userList.get(index).hasId(id)) ? userList.get(index) : null;
-        }
-
-        if(foundedUser == null) {
-            throw new ResourceNotFoundException(User.class, id);
-        }
-
-        if(!foundedUser.hasId(userId)) {
+    public User updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId) {
+        if(userIdToUpdate == requestUserId) {
+            User foundUser = userRepository.findById(userIdToUpdate);
+            if(!dataToUpdate.getEmail().isEmpty()) {
+                foundUser.setEmail(dataToUpdate.getEmail());
+            }
+            if(!dataToUpdate.getPassword().isEmpty()) {
+                foundUser.setPassword(dataToUpdate.getPassword());
+            }
+            if(!dataToUpdate.getFullName().isEmpty()) {
+                foundUser.setFullName(dataToUpdate.getFullName());
+            }
+            userRepository.save(foundUser);
+            return foundUser;
+        } else {
             throw new UnauthorizedException();
         }
-
-        foundedUser.updateInfo(dataToUpdate);
-        return foundedUser;
     }
 }

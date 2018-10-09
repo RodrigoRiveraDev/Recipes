@@ -1,96 +1,96 @@
 package com.recipes.Services;
 
-import com.recipes.DTO.Recipe;
+import com.recipes.DTO.RecipeDTO;
+import com.recipes.Entities.Recipe;
+import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
+import com.recipes.Repositories.RecipeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class RecipeServices implements IRecipeServices {
 
-    private List<Recipe> recipeList = new ArrayList<>();
+    private RecipeRepository recipeRepository;
+    private UserServices userServices;
 
-    @Override
-    public void save(Recipe recipe) {
-        if(!recipe.hasAllParameters()) {
-            throw new IllegalArgumentException("All the parameters must not be nulls or empties");
-        }
-        recipeList.add(recipe);
+    @Autowired
+    public RecipeServices(RecipeRepository recipeRepository, UserServices userServices) {
+        this.recipeRepository = recipeRepository;
+        this.userServices = userServices;
     }
 
     @Override
-    public Recipe updateRecipeInfo(long id, Recipe dataToUpdate, long userId) {
-        Recipe foundedRecipe = null;
-        int index = recipeList.size();
-        if(id < 0) {
-            throw new IllegalArgumentException("Negative id is not valid");
-        }
+    public Recipe save(Recipe recipe, long userId) throws Exception {
 
-        while(foundedRecipe == null && --index >= 0) {
-            foundedRecipe = (recipeList.get(index).hasId(id)) ? recipeList.get(index) : null;
-        }
+        User user = userServices.findUserById(userId);
 
-        if(foundedRecipe == null) {
-            throw new ResourceNotFoundException(Recipe.class, id);
-        }
-
-        if(!foundedRecipe.isOwner(userId)) {
+        if(user == null) {
             throw new UnauthorizedException();
         }
 
-        foundedRecipe.updateInfo(dataToUpdate);
-        return foundedRecipe;
+        recipe.setUserId(userId);
+
+        return recipeRepository.save(recipe);
     }
 
     @Override
-    public void deleteRecipe(long userId, long recipeId) {
-        long foundedRecipeIndex = -1;
-        int index = recipeList.size();
-        if(recipeId < 0) {
-            throw new IllegalArgumentException("Negative id is not valid");
-        }
+    public Recipe updateRecipeInfo(int recipeId, RecipeDTO dataToUpdate, int userId) throws Exception {
 
-        while(foundedRecipeIndex == -1 && --index >= 0) {
-            foundedRecipeIndex = (recipeList.get(index).hasId(recipeId)) ? index : -1;
-        }
+        Recipe recipe = recipeRepository.findById(recipeId);
 
-        if(foundedRecipeIndex == -1) {
+        if(recipe == null) {
             throw new ResourceNotFoundException(Recipe.class, recipeId);
         }
 
-        Recipe foundedRecipe = recipeList.get((int)foundedRecipeIndex);
-
-        if(!foundedRecipe.isOwner(userId)) {
+        if(recipe.getUserId() == userId) {
+            if(!dataToUpdate.getHowElaborate().isEmpty()) {
+                recipe.setHowElaborate(dataToUpdate.getHowElaborate());
+            }
+            if(dataToUpdate.getIngredients().size() > 0) {
+                recipe.setIngredients(dataToUpdate.getIngredients());
+            }
+            recipeRepository.save(recipe);
+        } else {
             throw new UnauthorizedException();
         }
 
-        recipeList.remove(foundedRecipe);
+        return recipe;
     }
 
     @Override
-    public Recipe getRecipeById(int id) {
-        Recipe foundedRecipe = null;
-        int index = recipeList.size();
-        if(id < 0) {
-            throw new IllegalArgumentException("Negative id is not valid");
+    public void deleteRecipe(int userId, int recipeId) throws Exception {
+
+        Recipe recipe = recipeRepository.findById(recipeId);
+
+        if(recipe == null) {
+            throw new ResourceNotFoundException(Recipe.class, recipeId);
         }
 
-        while(foundedRecipe == null && --index >= 0) {
-            foundedRecipe = (recipeList.get(index).hasId(id)) ? recipeList.get(index) : null;
+        if(recipe.getUserId() != userId) {
+            throw new UnauthorizedException();
         }
 
-        if(foundedRecipe == null) {
+        recipeRepository.delete(recipe);
+    }
+
+    @Override
+    public Recipe getRecipeById(int id) throws Exception  {
+
+        Recipe recipe = recipeRepository.findById(id);
+
+        if(recipe == null) {
             throw new ResourceNotFoundException(Recipe.class, id);
         }
 
-        return foundedRecipe;
+        return recipe;
     }
 
     @Override
-    public List<Recipe> getRecipeList() {
-        return recipeList;
+    public List<Recipe> getRecipeDTOList() {
+        return recipeRepository.findAll();
     }
 }

@@ -1,18 +1,19 @@
 package com.recipes.Services;
 
-import com.recipes.DTO.Recipe;
+import com.recipes.DTO.RecipeDTO;
+import com.recipes.Entities.Recipe;
 
 import java.util.List;
 
 public interface IRecipeServices {
 
-    void save(Recipe recipe);
+    Recipe save(Recipe recipe, long userId) throws Exception;
 
-    List<Recipe> getRecipeList();
+    List<Recipe> getRecipeDTOList();
 
-    Recipe updateRecipeInfo(long id, Recipe dataToUpdate, long userId);
+    Recipe updateRecipeInfo(int id, RecipeDTO dataToUpdate, int userId) throws Exception ;
 
-    void deleteRecipe(long userId, long id);
+    void deleteRecipe(int userId, int id) throws Exception ;
 
-    Recipe getRecipeById(int id);
+    Recipe getRecipeById(int id) throws Exception ;
 }

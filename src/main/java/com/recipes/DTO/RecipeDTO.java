@@ -1,30 +1,31 @@
 package com.recipes.DTO;
 
-import java.util.ArrayList;
+import com.recipes.Entities.Ingredient;
+
 import java.util.List;
 
-public class Recipe {
+public class RecipeDTO {
 
-    private long id;
+    private int id;
     private List<Ingredient> ingredients;
     private String howElaborate;
-    private long userId;
+    private int userId;
 
-    public Recipe() {
+    public RecipeDTO() {
         ingredients = null;
         howElaborate = "";
     }
 
-    public Recipe(List<Ingredient> ingredients, String howElaborate) {
+    public RecipeDTO(List<Ingredient> ingredients, String howElaborate) {
         this.ingredients = ingredients;
         this.howElaborate = howElaborate;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -44,11 +45,11 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -57,11 +58,11 @@ public class Recipe {
                 ingredients.size() > 0;
     }
 
-    public boolean hasId(long id) {
+    public boolean hasId(int id) {
         return this.id == id;
     }
 
-    public void updateInfo(Recipe dataToUpdate) {
+    public void updateInfo(RecipeDTO dataToUpdate) {
         if(!dataToUpdate.getHowElaborate().isEmpty()) {
             this.howElaborate = dataToUpdate.getHowElaborate();
         }
@@ -70,15 +71,39 @@ public class Recipe {
         }
     }
 
-    public boolean isOwner(long id) {
+    public boolean isOwner(int id) {
         return this.userId == id;
     }
 
     @Override
     public boolean equals(Object obj) {
-        Recipe other = (Recipe) obj;
+        RecipeDTO other = (RecipeDTO) obj;
         return  this.howElaborate.equals(other.howElaborate) &&
                 this.ingredients.equals(other.ingredients) &&
                 this.id == other.getId();
+    }
+
+    private String ingredientsToJSON() {
+        StringBuilder sb = new StringBuilder("[");
+        boolean first = true;
+        for(Ingredient ingredient: ingredients) {
+            if(first) {
+                first = false;
+            }
+            else {
+                sb.append(",");
+            }
+            sb.append(String.format("{" +
+                    "\"name\": \"%s\"," +
+                    "\"quantity\": \"%s\"," +
+                    "\"unit\": \"%s\"" +
+                    "}", ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit()));
+        }
+        return sb.toString()+"]";
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{\"howElaborate\":\"%s\", \"ingredients\":%s}", howElaborate, ingredientsToJSON());
     }
 }
