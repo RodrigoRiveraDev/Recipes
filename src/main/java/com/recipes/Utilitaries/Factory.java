@@ -1,7 +1,9 @@
 package com.recipes.Utilitaries;
 
-import com.recipes.DTO.Ingredient;
+import com.recipes.DTO.RecipeDTO;
 import com.recipes.DTO.UserDTO;
+import com.recipes.Entities.Ingredient;
+import com.recipes.Entities.Recipe;
 import com.recipes.Entities.User;
 
 import java.util.ArrayList;
@@ -24,12 +26,8 @@ public class Factory {
         return userDTOS;
     }
 
-    public static List<com.recipes.Entities.Ingredient> toIngredientsList(List<Ingredient> ingredientsDTO) {
-        List<com.recipes.Entities.Ingredient> ingredients = new ArrayList<>();
-        for (Ingredient ingredient: ingredientsDTO) {
-            ingredients.add(toIngredient(ingredient));
-        }
-        return ingredients;
+    public static RecipeDTO recipeDTO(Recipe recipe) {
+        return new RecipeDTO(recipe.getIngredients(), recipe.getHowElaborate());
     }
 
     private static com.recipes.Entities.Ingredient toIngredient(Ingredient ingredientDTO) {

@@ -1,5 +1,7 @@
 package com.recipes.DTO;
 
+import com.recipes.Entities.Ingredient;
+
 import java.util.List;
 
 public class RecipeDTO {
@@ -79,5 +81,29 @@ public class RecipeDTO {
         return  this.howElaborate.equals(other.howElaborate) &&
                 this.ingredients.equals(other.ingredients) &&
                 this.id == other.getId();
+    }
+
+    private String ingredientsToJSON() {
+        StringBuilder sb = new StringBuilder("[");
+        boolean first = true;
+        for(Ingredient ingredient: ingredients) {
+            if(first) {
+                first = false;
+            }
+            else {
+                sb.append(",");
+            }
+            sb.append(String.format("{" +
+                    "\"name\": \"%s\"," +
+                    "\"quantity\": \"%s\"," +
+                    "\"unit\": \"%s\"" +
+                    "}", ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit()));
+        }
+        return sb.toString()+"]";
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{\"howElaborate\":\"%s\", \"ingredients\":%s}", howElaborate, ingredientsToJSON());
     }
 }
