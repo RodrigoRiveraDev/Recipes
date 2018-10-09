@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface IUserServices {
 
-    public void save(UserDTO userDTO);
+    public User save(User userDTO) throws Exception;
 
     public List<User> getUserList();
 
-    public UserDTO findUserbyId(long id);
+    public User findUserbyId(long id) throws Exception;
 
-    public UserDTO updateUserInfo(int id, UserDTO dataToUpdate, int userId);
+    public User updateUserInfo(int id, UserDTO dataToUpdate, int userId) throws Exception;
 }

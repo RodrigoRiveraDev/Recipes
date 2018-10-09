@@ -3,6 +3,8 @@ package com.recipes.Services;
 import com.recipes.DTO.RecipeDTO;
 import com.recipes.Entities.Recipe;
 import com.recipes.Entities.User;
+import com.recipes.Exceptions.ResourceNotFoundException;
+import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Repositories.RecipeRepository;
 import com.recipes.Utilitaries.Factory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +25,28 @@ public class RecipeServices implements IRecipeServices {
     }
 
     @Override
-    public void save(Recipe recipe, long userId) {
-        User user = Factory.toUser(userServices.findUserbyId(userId));
-        if(user != null) {
-            user.setId(userId);
-            recipe.setUserId(userId);
+    public Recipe save(Recipe recipe, long userId) throws Exception {
+
+        User user = userServices.findUserbyId(userId);
+
+        if(user == null) {
+            throw new UnauthorizedException();
         }
-        recipeRepository.save(recipe);
+
+        recipe.setUserId(userId);
+
+        return recipeRepository.save(recipe);
     }
 
     @Override
-    public Recipe updateRecipeInfo(int recipeId, RecipeDTO dataToUpdate, int userId) {
+    public Recipe updateRecipeInfo(int recipeId, RecipeDTO dataToUpdate, int userId) throws Exception {
+
         Recipe recipe = recipeRepository.findById(recipeId);
+
+        if(recipe == null) {
+            throw new ResourceNotFoundException(Recipe.class, recipeId);
+        }
+
         if(recipe.getUserId() == userId) {
             if(!dataToUpdate.getHowElaborate().isEmpty()) {
                 recipe.setHowElaborate(dataToUpdate.getHowElaborate());
@@ -43,21 +55,39 @@ public class RecipeServices implements IRecipeServices {
                 recipe.setIngredients(Factory.toIngredientsList(dataToUpdate.getIngredients()));
             }
             recipeRepository.save(recipe);
+        } else {
+            throw new UnauthorizedException();
         }
+
         return recipe;
     }
 
     @Override
-    public void deleteRecipe(int userId, int recipeId) {
-        Recipe recipe = recipeRepository.findById(userId);
-        if(recipe != null && recipe.getUserId() == recipeId) {
-            recipeRepository.delete(recipe);
+    public void deleteRecipe(int userId, int recipeId) throws Exception {
+
+        Recipe recipe = recipeRepository.findById(recipeId);
+
+        if(recipe == null) {
+            throw new ResourceNotFoundException(Recipe.class, recipeId);
         }
+
+        if(recipe.getUserId() != userId) {
+            throw new UnauthorizedException();
+        }
+
+        recipeRepository.delete(recipe);
     }
 
     @Override
-    public Recipe getRecipeById(int id) {
-        return recipeRepository.findById(id);
+    public Recipe getRecipeById(int id) throws Exception  {
+
+        Recipe recipe = recipeRepository.findById(id);
+
+        if(recipe == null) {
+            throw new ResourceNotFoundException(Recipe.class, id);
+        }
+
+        return recipe;
     }
 
     @Override

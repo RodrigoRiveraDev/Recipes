@@ -10,7 +10,7 @@ public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+    private long id;
     @NotEmpty
     private String howElaborate;
     private long userId;
@@ -22,7 +22,7 @@ public class Recipe {
         return ingredients;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -30,7 +30,7 @@ public class Recipe {
         this.howElaborate = howElaborate;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

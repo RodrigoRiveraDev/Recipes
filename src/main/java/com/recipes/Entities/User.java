@@ -11,7 +11,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+    private long id;
     @NotEmpty
     private String fullName;
     @NotEmpty
@@ -51,11 +51,11 @@ public class User {
         this.fullName = fullName;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 }

@@ -2,6 +2,7 @@ package com.recipes.Services;
 
 import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
+import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Repositories.UserRepository;
 import com.recipes.Utilitaries.Factory;
@@ -21,8 +22,8 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public void save(UserDTO user) {
-        userRepository.save(Factory.toUser(user));
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Override
@@ -31,12 +32,16 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public UserDTO findUserbyId(long id) {
-        return Factory.toUserDTO(userRepository.findById(id));
+    public User findUserbyId(long id) throws Exception {
+        User foundUser = userRepository.findById(id);
+        if(foundUser == null) {
+            throw new ResourceNotFoundException(User.class, id);
+        }
+        return foundUser;
     }
 
     @Override
-    public UserDTO updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId) {
+    public User updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId) throws Exception {
         if(userIdToUpdate == requestUserId) {
             User foundUser = userRepository.findById(userIdToUpdate);
             if(!dataToUpdate.getEmail().isEmpty()) {
@@ -49,7 +54,7 @@ public class UserServices implements IUserServices {
                 foundUser.setFullName(dataToUpdate.getFullName());
             }
             userRepository.save(foundUser);
-            return Factory.toUserDTO(foundUser);
+            return foundUser;
         } else {
             throw new UnauthorizedException();
         }

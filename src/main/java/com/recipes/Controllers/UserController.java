@@ -26,17 +26,12 @@ public class UserController {
 
     /**
      * This endpoint is to add a new User
-     * @param newUserDTO The User object with the needed information (full name, password, email)
+     * @param newUser The User object with the needed information (full name, password, email)
      * @return This will return a JSON with the created User object or an exception
      */
     @PostMapping
-    public HttpEntity registerUser(@RequestBody UserDTO newUserDTO) {
-        try {
-            userServices.save(newUserDTO);
-            return new ResponseEntity<>(newUserDTO.toString(), HttpStatus.CREATED);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public User registerUser(@RequestBody User newUser) throws Exception {
+        return userServices.save(newUser);
     }
 
     /**
@@ -45,15 +40,8 @@ public class UserController {
      * @return This will return a JSON with the User object or an exception
      */
     @GetMapping(value = "/{id}")
-    public HttpEntity getUserById(@PathVariable int id) {
-        try {
-            UserDTO foundedUserDTO = userServices.findUserbyId(id);
-            return new ResponseEntity<>(foundedUserDTO, HttpStatus.OK);
-        } catch (IllegalArgumentException ilegalArugmentException) {
-            return new ResponseEntity<>(ilegalArugmentException.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException resourceNotFoundException) {
-            return new ResponseEntity<>(resourceNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public User getUserById(@PathVariable int id) throws Exception {
+        return userServices.findUserbyId(id);
     }
 
     /**
@@ -64,17 +52,9 @@ public class UserController {
      * @return This will return a JSON with the modified User object or an exception
      */
     @PutMapping(value = "/{id}")
-    public HttpEntity updateUser(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody UserDTO dataToUpdate) {
-        try {
-            UserDTO foundedUserDTO = userServices.updateUserInfo(id, dataToUpdate, userId);
-            return new ResponseEntity<>(foundedUserDTO, HttpStatus.CREATED);
-        } catch (IllegalArgumentException ilegalArugmentException) {
-            return new ResponseEntity<>(ilegalArugmentException.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException resourceNotFoundException) {
-            return new ResponseEntity<>(resourceNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (UnauthorizedException unauthorizedException) {
-            return new ResponseEntity<>(unauthorizedException.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
+    public User updateUser(@RequestHeader(value="userId") int userId,
+                           @PathVariable int id, @RequestBody UserDTO dataToUpdate) throws Exception {
+        return userServices.updateUserInfo(id, dataToUpdate, userId);
     }
 
     /**

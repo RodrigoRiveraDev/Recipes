@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+    private long id;
     @NotEmpty
     private String name;
     @NotNull
@@ -27,7 +27,7 @@ public class Ingredient {
         this.unit = unit;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -43,7 +43,7 @@ public class Ingredient {
         this.unit = unit;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
