@@ -26,7 +26,8 @@ public class RecipeController {
      * @return This will return a JSON with the created Recipe object or an exception
      */
     @PostMapping
-    public Recipe registerRecipe(@RequestHeader(value="userId") int userId, @RequestBody Recipe newRecipe) {
+    public Recipe registerRecipe(@RequestHeader(value="userId") int userId,
+                                 @RequestBody Recipe newRecipe) throws Exception{
         return recipeServices.save(newRecipe, userId);
     }
 
@@ -38,7 +39,8 @@ public class RecipeController {
      * @return This will return a JSON with the the modified Recipe object  or an exception
      */
     @PutMapping(value = "/{id}")
-    public Recipe updateRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) {
+    public Recipe updateRecipe(@RequestHeader(value="userId") int userId,
+                               @PathVariable int id, @RequestBody RecipeDTO dataToUpdate) throws Exception {
         return recipeServices.updateRecipeInfo(id, dataToUpdate, userId);
     }
 
@@ -49,7 +51,7 @@ public class RecipeController {
      * @return This will return an empty JSON or an exception
      */
     @DeleteMapping(value = "/{id}")
-    public void deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) {
+    public void deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) throws Exception {
         recipeServices.deleteRecipe(userId, id);
     }
 
@@ -68,7 +70,7 @@ public class RecipeController {
      * @return This will return a JSON with the Recipe information or an exception
      */
     @GetMapping(value = "/{id}")
-    public Recipe getRecipeById(@PathVariable int id) {
+    public Recipe getRecipeById(@PathVariable int id) throws Exception {
         return recipeServices.getRecipeById(id);
     }
 

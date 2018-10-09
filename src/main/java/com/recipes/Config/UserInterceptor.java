@@ -19,6 +19,8 @@ public class UserInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request,
                            HttpServletResponse response, Object object, ModelAndView model)
             throws Exception {
+        System.out.println(response.getStatus());
+        System.out.println(object.toString());
         System.out.println("Handler execution is complete");
     }
 

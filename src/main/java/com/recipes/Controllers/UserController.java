@@ -30,7 +30,7 @@ public class UserController {
      * @return This will return a JSON with the created User object or an exception
      */
     @PostMapping
-    public User registerUser(@RequestBody User newUser) {
+    public User registerUser(@RequestBody User newUser) throws Exception {
         return userServices.save(newUser);
     }
 
@@ -40,7 +40,7 @@ public class UserController {
      * @return This will return a JSON with the User object or an exception
      */
     @GetMapping(value = "/{id}")
-    public User getUserById(@PathVariable int id) {
+    public User getUserById(@PathVariable int id) throws Exception {
         return userServices.findUserbyId(id);
     }
 
@@ -52,7 +52,8 @@ public class UserController {
      * @return This will return a JSON with the modified User object or an exception
      */
     @PutMapping(value = "/{id}")
-    public User updateUser(@RequestHeader(value="userId") int userId, @PathVariable int id, @RequestBody UserDTO dataToUpdate) {
+    public User updateUser(@RequestHeader(value="userId") int userId,
+                           @PathVariable int id, @RequestBody UserDTO dataToUpdate) throws Exception {
         return userServices.updateUserInfo(id, dataToUpdate, userId);
     }
 
