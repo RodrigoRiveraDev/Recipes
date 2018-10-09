@@ -6,7 +6,6 @@ import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Repositories.RecipeRepository;
-import com.recipes.Utilitaries.Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +51,7 @@ public class RecipeServices implements IRecipeServices {
                 recipe.setHowElaborate(dataToUpdate.getHowElaborate());
             }
             if(dataToUpdate.getIngredients().size() > 0) {
-                recipe.setIngredients(Factory.toIngredientsList(dataToUpdate.getIngredients()));
+                recipe.setIngredients(dataToUpdate.getIngredients());
             }
             recipeRepository.save(recipe);
         } else {

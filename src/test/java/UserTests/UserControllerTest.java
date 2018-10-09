@@ -1,12 +1,8 @@
 package UserTests;
 
-
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -15,6 +11,7 @@ import static org.hamcrest.Matchers.is;
 import com.recipes.Application;
 import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
+import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.UserServices;
 import javafx.beans.binding.Bindings;
@@ -26,15 +23,11 @@ import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -43,7 +36,6 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-@AutoConfigureMockMvc
 public class UserControllerTest {
 
     @Autowired
@@ -131,5 +123,28 @@ public class UserControllerTest {
         mockMvc.perform(put("/users/1").contentType(APPLICATION_JSON)
                 .content(bodyAsJson.toString()).header("userId", 2))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void shouldGetUserById() throws Exception {
+        User user = new User("fullName", "password", "a@a.com");
+        user.setId(1);
+
+        Mockito.when(userServices.findUserById(Mockito.anyLong())).thenReturn(user);
+
+        mockMvc.perform(get("/users/"+user.getId()).contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fullName", is(user.getFullName())))
+                .andExpect(jsonPath("$.password", is(user.getPassword())))
+                .andExpect(jsonPath("$.email", is(user.getEmail())));
+    }
+
+    @Test
+    public void shouldGetUserByIdNotFound() throws Exception {
+        Mockito.when(userServices.findUserById(Mockito.anyLong()))
+                .thenThrow(new ResourceNotFoundException(User.class, 1));
+
+        mockMvc.perform(get("/users/1").contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

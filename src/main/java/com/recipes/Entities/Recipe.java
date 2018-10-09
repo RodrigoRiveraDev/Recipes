@@ -3,6 +3,7 @@ package com.recipes.Entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,15 @@ public class Recipe {
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Ingredient> ingredients;
+
+    public Recipe() {
+        ingredients = new ArrayList<>();
+    }
+
+    public Recipe(String howElaborate, List<Ingredient> ingredients) {
+        this.howElaborate = howElaborate;
+        this.ingredients = ingredients;
+    }
 
     public List<Ingredient> getIngredients() {
         return ingredients;
