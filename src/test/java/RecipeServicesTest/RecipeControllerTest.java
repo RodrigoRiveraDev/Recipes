@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.is;
 
 import com.recipes.Application;
 import com.recipes.DTO.RecipeDTO;
-import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.Ingredient;
 import com.recipes.Entities.Recipe;
 import com.recipes.Entities.User;
@@ -18,10 +17,7 @@ import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.RecipeServices;
 import com.recipes.Services.UserServices;
-import io.swagger.models.auth.In;
-import org.hamcrest.Factory;
 import org.hamcrest.Matchers;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

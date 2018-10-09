@@ -14,7 +14,6 @@ import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.UserServices;
-import javafx.beans.binding.Bindings;
 import org.hamcrest.Matchers;
 import org.json.JSONObject;
 import org.junit.Before;

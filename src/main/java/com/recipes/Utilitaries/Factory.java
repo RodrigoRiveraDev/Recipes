@@ -27,8 +27,7 @@ public class Factory {
     }
 
     public static RecipeDTO recipeDTO(Recipe recipe) {
-        RecipeDTO recipeDTO = new RecipeDTO(recipe.getIngredients(), recipe.getHowElaborate());
-        return recipeDTO;
+        return new RecipeDTO(recipe.getIngredients(), recipe.getHowElaborate());
     }
 
     private static com.recipes.Entities.Ingredient toIngredient(Ingredient ingredientDTO) {
