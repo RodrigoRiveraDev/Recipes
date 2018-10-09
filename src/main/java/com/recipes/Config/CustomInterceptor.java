@@ -16,8 +16,8 @@ public class CustomInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response, Object object, Exception ex) throws  Exception{
-        String logInfo = "[afterCompletion][" + request. + "]";
+                                HttpServletResponse response, Object object, Exception ex) {
+        String logInfo = "[afterCompletion][" + request + "]";
         if(ex != null) {
             logInfo = logInfo + "[exception: " + ex.getMessage() + "]";
         }
@@ -26,14 +26,13 @@ public class CustomInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request,
-                           HttpServletResponse response, Object object, ModelAndView model)
-            throws Exception {
+                           HttpServletResponse response, Object object, ModelAndView model) {
         log.info("[postHandle][" + request + "]");
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object object) throws Exception {
+                             HttpServletResponse response, Object object) {
         log.info("[preHandle][" + request + "]" + "[" + request.getMethod()
                 + "]" + request.getRequestURI());
         return true;

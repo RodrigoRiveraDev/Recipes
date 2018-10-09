@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface IngredientRepository extends CrudRepository<Ingredient, Long> {
 
-    public List<Ingredient> findAll();
+    List<Ingredient> findAll();
 
 }

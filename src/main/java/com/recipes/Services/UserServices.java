@@ -5,7 +5,6 @@ import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Repositories.UserRepository;
-import com.recipes.Utilitaries.Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,7 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public User findUserbyId(long id) throws Exception {
+    public User findUserById(long id) throws Exception {
         User foundUser = userRepository.findById(id);
         if(foundUser == null) {
             throw new ResourceNotFoundException(User.class, id);
@@ -41,7 +40,7 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public User updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId) throws Exception {
+    public User updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId) {
         if(userIdToUpdate == requestUserId) {
             User foundUser = userRepository.findById(userIdToUpdate);
             if(!dataToUpdate.getEmail().isEmpty()) {
