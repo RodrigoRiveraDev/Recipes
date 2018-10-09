@@ -16,12 +16,4 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("SELECT u FROM User u")
     List<User> allUsers();
 
-    /*@Modifying
-    @Query( "UPDATE User u" +
-            "SET u.email = :email, u.password = :password, u.email = :email " +
-            "WHERE u.id = :id")
-    User updateUser(@Param("id")int userIdToUpdate,
-                    @Param("name") String name,
-                    @Param("password") String password,
-                    @Param("email") String email);*/
 }

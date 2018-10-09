@@ -64,14 +64,14 @@ public class RecipeServices implements IRecipeServices {
 
     @Override
     public void deleteRecipe(int userId, int recipeId) throws Exception {
-        //recipeRepository.delete(recipeId, userId);
+
         Recipe recipe = recipeRepository.findById(recipeId);
 
         if(recipe == null) {
             throw new ResourceNotFoundException(Recipe.class, recipeId);
         }
 
-        if(recipe.getUserId() == recipeId) {
+        if(recipe.getUserId() != userId) {
             throw new UnauthorizedException();
         }
 
