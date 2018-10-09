@@ -27,7 +27,7 @@ public class RecipeServices implements IRecipeServices {
     @Override
     public Recipe save(Recipe recipe, long userId) throws Exception {
 
-        User user = userServices.findUserbyId(userId);
+        User user = userServices.findUserById(userId);
 
         if(user == null) {
             throw new UnauthorizedException();

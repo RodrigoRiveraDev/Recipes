@@ -3,14 +3,9 @@ package com.recipes.Controllers;
 import java.util.List;
 import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
-import com.recipes.Exceptions.ResourceNotFoundException;
-import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.IUserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,7 +36,7 @@ public class UserController {
      */
     @GetMapping(value = "/{id}")
     public User getUserById(@PathVariable int id) throws Exception {
-        return userServices.findUserbyId(id);
+        return userServices.findUserById(id);
     }
 
     /**

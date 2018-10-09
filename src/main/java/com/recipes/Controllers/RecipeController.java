@@ -48,7 +48,6 @@ public class RecipeController {
      * This endpoint is to delete a registered Recipe
      * @param userId The user id that is deleting the Recipe
      * @param id The recipe id
-     * @return This will return an empty JSON or an exception
      */
     @DeleteMapping(value = "/{id}")
     public void deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) throws Exception {
