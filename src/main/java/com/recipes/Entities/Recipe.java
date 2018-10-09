@@ -11,7 +11,7 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private long id;
-    @NotEmpty
+    @NotEmpty(message = "howElaborate must not be empty")
     private String howElaborate;
     private long userId;
     @NotNull

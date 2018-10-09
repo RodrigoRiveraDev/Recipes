@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class User {
@@ -58,4 +60,5 @@ public class User {
     public void setId(long id) {
         this.id = id;
     }
+
 }

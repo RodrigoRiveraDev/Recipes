@@ -2,14 +2,28 @@ package UserTests;
 
 import com.recipes.DTO.UserDTO;
 
+import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
+import com.recipes.Repositories.UserRepository;
 import com.recipes.Services.UserServices;
+import org.assertj.core.api.Java6Assertions;
+import org.hamcrest.beans.SamePropertyValuesAs;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@RunWith(SpringRunner.class)
+public class UserServicesTest {
 
 
-public class UserDTOServicesTest {
     /*
     @Test
     public void addNewUser() {
