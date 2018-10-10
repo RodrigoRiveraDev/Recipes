@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface IngredientRepository extends CrudRepository<Ingredient, Long> {
 
+    /**
+     * @return It will retrieve a list with all the registered Ingredients
+     */
     List<Ingredient> findAll();
 
 }
