@@ -12,45 +12,30 @@ public class UserDTO {
         this.password = "";
     }
 
-    public UserDTO(long id, String fullName, String email, String password) {
-        this.id = id;
-        this.fullName = fullName;
-        this.email = email;
-        this.password = password;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
+    /**
+     * @return It will return the fullName value
+     */
     public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
+    /**
+     * @return It will return the email value
+     */
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    /**
+     * @return It will return the password value
+     */
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    /**
+     * @return It will return the object as a String with Json format
+     */
     @Override
     public String toString() {
         return "{"+

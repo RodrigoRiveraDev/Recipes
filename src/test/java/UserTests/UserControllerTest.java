@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -38,7 +39,7 @@ import java.util.List;
 public class UserControllerTest {
 
     @Autowired
-    WebApplicationContext webApplicationContext;
+    private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
 
@@ -53,7 +54,7 @@ public class UserControllerTest {
     @Test
     public void shouldReturnDefaultList() throws Exception {
         User user = new User("fullName", "password", "a@a.com");
-        List<User> allUsers = Arrays.asList(user);
+        List<User> allUsers = Collections.singletonList(user);
 
         BDDMockito.given(userServices.getUserList()).willReturn(allUsers);
 
@@ -94,7 +95,7 @@ public class UserControllerTest {
         bodyAsJson.put("password", "");
         bodyAsJson.put("email", "");
 
-        Mockito.when(userServices.updateUserInfo(Mockito.anyInt(), Mockito.any(UserDTO.class), Mockito.anyInt())).thenReturn(updatedUser);
+        Mockito.when(userServices.updateUserInfo(Mockito.anyLong(), Mockito.any(UserDTO.class), Mockito.anyLong())).thenReturn(updatedUser);
 
         mockMvc.perform(put("/users/"+user.getId()).contentType(APPLICATION_JSON)
                 .content(bodyAsJson.toString()).header("userId", user.getId()))
@@ -116,11 +117,11 @@ public class UserControllerTest {
         bodyAsJson.put("password", "");
         bodyAsJson.put("email", "");
 
-        Mockito.when(userServices.updateUserInfo(Mockito.anyInt(), Mockito.any(UserDTO.class), Mockito.anyInt()))
+        Mockito.when(userServices.updateUserInfo(Mockito.anyLong(), Mockito.any(UserDTO.class), Mockito.anyLong()))
                 .thenThrow(new UnauthorizedException());
 
         mockMvc.perform(put("/users/1").contentType(APPLICATION_JSON)
-                .content(bodyAsJson.toString()).header("userId", 2))
+                .content(bodyAsJson.toString()).header("userId", 20))
                 .andExpect(status().isUnauthorized());
     }
 
