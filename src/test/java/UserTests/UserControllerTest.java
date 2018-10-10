@@ -78,7 +78,7 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/users").contentType(APPLICATION_JSON)
                 .content(bodyAsJson.toString()))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.fullName", is(user.getFullName())));
     }
 

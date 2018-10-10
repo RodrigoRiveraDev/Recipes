@@ -60,10 +60,4 @@ public class UserDTO {
                 +"}";
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        UserDTO other = (UserDTO)obj;
-        return this.password.equals(other.password) &&
-                this.email.equals(other.email) && this.fullName.equals(other.email);
-    }
 }

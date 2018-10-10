@@ -53,36 +53,6 @@ public class RecipeDTO {
         this.userId = userId;
     }
 
-    public boolean hasAllParameters() {
-        return  !howElaborate.isEmpty() &&
-                ingredients.size() > 0;
-    }
-
-    public boolean hasId(int id) {
-        return this.id == id;
-    }
-
-    public void updateInfo(RecipeDTO dataToUpdate) {
-        if(!dataToUpdate.getHowElaborate().isEmpty()) {
-            this.howElaborate = dataToUpdate.getHowElaborate();
-        }
-        if(dataToUpdate.getIngredients().size() > 0) {
-            this.ingredients = dataToUpdate.getIngredients();
-        }
-    }
-
-    public boolean isOwner(int id) {
-        return this.userId == id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        RecipeDTO other = (RecipeDTO) obj;
-        return  this.howElaborate.equals(other.howElaborate) &&
-                this.ingredients.equals(other.ingredients) &&
-                this.id == other.getId();
-    }
-
     private String ingredientsToJSON() {
         StringBuilder sb = new StringBuilder("[");
         boolean first = true;
