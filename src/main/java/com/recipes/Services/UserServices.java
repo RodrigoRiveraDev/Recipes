@@ -21,16 +21,29 @@ public class UserServices implements IUserServices {
         this.userRepository = userRepository;
     }
 
+    /**
+     * @param userDTO The User information to be stored
+     * @return It will return the user that has been stored
+     * @throws ResourceAlreadyExistsException In case that there is a user with the same provided data stored
+     */
     @Override
     public User save(User user) throws ResourceAlreadyExistsException {
         return userRepository.save(user);
     }
 
+    /**
+     * @return It will return a list with all the registered users
+     */
     @Override
     public List<User> getUserList() {
         return userRepository.allUsers();
     }
 
+    /**
+     * @param id The user id to search for
+     * @return It will return the User with the provided id
+     * @throws ResourceNotFoundException In case that there is not a registered user with the provided id
+     */
     @Override
     public User findUserById(long id) throws ResourceNotFoundException {
         User foundUser = userRepository.findById(id);
@@ -40,8 +53,16 @@ public class UserServices implements IUserServices {
         return foundUser;
     }
 
+    /**
+     * @param userIdToUpdate The user id to update
+     * @param dataToUpdate The data to modify in the User entity
+     * @param userId The user that request the update
+     * @return It will return the updated user
+     * @throws UnauthorizedException In case that user that request the update is not the user to be updated
+     * @throws ResourceNotFoundException In case that there is not a registered user with the provided id
+     */
     @Override
-    public User updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId)
+    public User updateUserInfo(long userIdToUpdate, UserDTO dataToUpdate, long requestUserId)
             throws UnauthorizedException, ResourceNotFoundException {
         if(userIdToUpdate == requestUserId) {
             User foundUser = userRepository.findById(userIdToUpdate);

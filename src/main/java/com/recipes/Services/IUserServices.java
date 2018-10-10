@@ -10,12 +10,33 @@ import java.util.List;
 
 public interface IUserServices {
 
+    /**
+     * @param userDTO The User information to be stored
+     * @return It will return the user that has been stored
+     * @throws ResourceAlreadyExistsException In case that there is a user with the same provided data stored
+     */
     User save(User userDTO) throws ResourceAlreadyExistsException;
 
+    /**
+     * @return It will return a list with all the registered users
+     */
     List<User> getUserList();
 
+    /**
+     * @param id The user id to search for
+     * @return It will return the User with the provided id
+     * @throws ResourceNotFoundException In case that there is not a registered user with the provided id
+     */
     User findUserById(long id) throws ResourceNotFoundException;
 
-    User updateUserInfo(int id, UserDTO dataToUpdate, int userId)
+    /**
+     * @param userIdToUpdate The user id to update
+     * @param dataToUpdate The data to modify in the User entity
+     * @param userId The user that request the update
+     * @return It will return the updated user
+     * @throws UnauthorizedException In case that user that request the update is not the user to be updated
+     * @throws ResourceNotFoundException In case that there is not a registered user with the provided id
+     */
+    User updateUserInfo(long userIdToUpdate, UserDTO dataToUpdate, long userId)
             throws UnauthorizedException, ResourceNotFoundException;
 }
