@@ -53,7 +53,7 @@ public class RecipeServices implements IRecipeServices {
      * @throws UnauthorizedException It will be thrown if the user that request is not the recipe owner
      */
     @Override
-    public Recipe updateRecipeInfo(int recipeId, RecipeDTO dataToUpdate, int userId)
+    public Recipe updateRecipeInfo(long recipeId, RecipeDTO dataToUpdate, long userId)
             throws ResourceNotFoundException, UnauthorizedException {
 
         Recipe recipe = recipeRepository.findById(recipeId);
@@ -84,7 +84,7 @@ public class RecipeServices implements IRecipeServices {
      * @throws UnauthorizedException It will be thrown if the user that request is not the recipe owner
      */
     @Override
-    public void deleteRecipe(int userId, int recipeId)
+    public void deleteRecipe(long userId, long recipeId)
             throws ResourceNotFoundException, UnauthorizedException {
 
         Recipe recipe = recipeRepository.findById(recipeId);
@@ -106,7 +106,7 @@ public class RecipeServices implements IRecipeServices {
      * @throws ResourceNotFoundException It will be thrown if there is not a Recipe with the provided id stored
      */
     @Override
-    public Recipe getRecipeById(int id) throws ResourceNotFoundException  {
+    public Recipe getRecipeById(long id) throws ResourceNotFoundException  {
 
         Recipe recipe = recipeRepository.findById(id);
 

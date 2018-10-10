@@ -97,7 +97,7 @@ public class RecipeControllerTest {
         User user = new User("fullName", "password", "a@a.com");
         user.setId(1);
 
-        Mockito.when(userServices.findUserById(Mockito.anyInt())).thenReturn(user);
+        Mockito.when(userServices.findUserById(Mockito.anyLong())).thenReturn(user);
         Mockito.when(recipeServices.save(Mockito.any(Recipe.class), Mockito.anyLong()))
                 .thenThrow(new UnauthorizedException());
 
@@ -117,7 +117,7 @@ public class RecipeControllerTest {
         ingredient.setQuantity(15);
         Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
 
-        Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyInt(), Mockito.any(RecipeDTO.class), Mockito.anyInt()))
+        Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenReturn(recipe);
 
         String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
@@ -137,14 +137,14 @@ public class RecipeControllerTest {
         ingredient.setQuantity(15);
         Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
 
-        Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyInt(), Mockito.any(RecipeDTO.class), Mockito.anyInt()))
+        Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenThrow(new UnauthorizedException());
 
         String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
 
         mockMvc.perform(put("/recipes/{id}", 2).contentType(APPLICATION_JSON)
                 .content(jsonBody)
-                .header("userId", 9))
+                .header("userId", 20))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -156,12 +156,12 @@ public class RecipeControllerTest {
         ingredient.setQuantity(15);
         Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
 
-        Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyInt(), Mockito.any(RecipeDTO.class), Mockito.anyInt()))
+        Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenThrow(new ResourceNotFoundException(Recipe.class, 9));
 
         String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
 
-        mockMvc.perform(put("/recipes/{id}", 2).contentType(APPLICATION_JSON)
+        mockMvc.perform(put("/recipes/{id}", 20).contentType(APPLICATION_JSON)
                 .content(jsonBody)
                 .header("userId", 9))
                 .andExpect(status().isNotFound());
@@ -175,12 +175,12 @@ public class RecipeControllerTest {
         ingredient.setQuantity(15);
         Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
 
-        Mockito.when(recipeServices.getRecipeById(Mockito.anyInt())).thenReturn(recipe);
+        Mockito.when(recipeServices.getRecipeById(Mockito.anyLong())).thenReturn(recipe);
 
         String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
 
         mockMvc.perform(get("/recipes/{id}", 1).contentType(APPLICATION_JSON)
-                .header("userId", 9))
+                .header("userId", 20))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.howElaborate", is(recipe.getHowElaborate())));
     }
@@ -193,19 +193,19 @@ public class RecipeControllerTest {
         ingredient.setQuantity(15);
         Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
 
-        Mockito.when(recipeServices.getRecipeById(Mockito.anyInt()))
+        Mockito.when(recipeServices.getRecipeById(Mockito.anyLong()))
                 .thenThrow(new ResourceNotFoundException(Recipe.class, 9));
 
         String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
 
         mockMvc.perform(get("/recipes/{id}", 1).contentType(APPLICATION_JSON)
-                .header("userId", 9))
+                .header("userId", 20))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void shouldDelete() throws Exception {
-        Mockito.doNothing().when(recipeServices).deleteRecipe(Mockito.anyInt(), Mockito.anyInt());
+        Mockito.doNothing().when(recipeServices).deleteRecipe(Mockito.anyLong(), Mockito.anyLong());
 
         mockMvc.perform(delete("/recipes/{id}", 1).contentType(APPLICATION_JSON)
                 .header("userId", 1))
@@ -215,10 +215,10 @@ public class RecipeControllerTest {
     @Test
     public void shouldNotDeleteUnauthorized() throws Exception {
         Mockito.doThrow(new UnauthorizedException()).when(recipeServices)
-                .deleteRecipe(Mockito.anyInt(), Mockito.anyInt());
+                .deleteRecipe(Mockito.anyLong(), Mockito.anyLong());
 
         mockMvc.perform(delete("/recipes/{id}", 1).contentType(APPLICATION_JSON)
-                .header("userId", 1))
+                .header("userId", 20))
                 .andExpect(status().isUnauthorized());
     }
 }

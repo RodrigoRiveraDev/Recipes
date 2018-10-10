@@ -94,7 +94,7 @@ public class UserControllerTest {
         bodyAsJson.put("password", "");
         bodyAsJson.put("email", "");
 
-        Mockito.when(userServices.updateUserInfo(Mockito.anyInt(), Mockito.any(UserDTO.class), Mockito.anyInt())).thenReturn(updatedUser);
+        Mockito.when(userServices.updateUserInfo(Mockito.anyLong(), Mockito.any(UserDTO.class), Mockito.anyLong())).thenReturn(updatedUser);
 
         mockMvc.perform(put("/users/"+user.getId()).contentType(APPLICATION_JSON)
                 .content(bodyAsJson.toString()).header("userId", user.getId()))
@@ -116,11 +116,11 @@ public class UserControllerTest {
         bodyAsJson.put("password", "");
         bodyAsJson.put("email", "");
 
-        Mockito.when(userServices.updateUserInfo(Mockito.anyInt(), Mockito.any(UserDTO.class), Mockito.anyInt()))
+        Mockito.when(userServices.updateUserInfo(Mockito.anyLong(), Mockito.any(UserDTO.class), Mockito.anyLong()))
                 .thenThrow(new UnauthorizedException());
 
         mockMvc.perform(put("/users/1").contentType(APPLICATION_JSON)
-                .content(bodyAsJson.toString()).header("userId", 2))
+                .content(bodyAsJson.toString()).header("userId", 20))
                 .andExpect(status().isUnauthorized());
     }
 

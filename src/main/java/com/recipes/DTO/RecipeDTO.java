@@ -53,6 +53,10 @@ public class RecipeDTO {
         this.userId = userId;
     }
 
+    /**
+     * private function to convert the Ingredients to JSON format
+     * @return It will retrieve the ingredients list in a JSON format
+     */
     private String ingredientsToJSON() {
         StringBuilder sb = new StringBuilder("[");
         boolean first = true;
@@ -72,6 +76,9 @@ public class RecipeDTO {
         return sb.toString()+"]";
     }
 
+    /**
+     * @return It will return the RecipeDTO as a String with Json format
+     */
     @Override
     public String toString() {
         return String.format("{\"howElaborate\":\"%s\", \"ingredients\":%s}", howElaborate, ingredientsToJSON());

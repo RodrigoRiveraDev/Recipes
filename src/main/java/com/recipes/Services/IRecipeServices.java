@@ -31,7 +31,7 @@ public interface IRecipeServices {
      * @throws ResourceNotFoundException It will be thrown if the is not a Recipe with the provided id stored
      * @throws UnauthorizedException It will be thrown if the user that request is not the recipe owner
      */
-    Recipe updateRecipeInfo(int recipeId, RecipeDTO dataToUpdate, int userId)
+    Recipe updateRecipeInfo(long recipeId, RecipeDTO dataToUpdate, long userId)
             throws ResourceNotFoundException, UnauthorizedException;
 
     /**
