@@ -6,6 +6,7 @@ import com.recipes.Entities.User;
 import com.recipes.Services.IUserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +26,7 @@ public class UserController {
      * @return This will return a JSON with the created User object or an exception
      */
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public User registerUser(@RequestBody User newUser) throws Exception {
         return userServices.save(newUser);
     }

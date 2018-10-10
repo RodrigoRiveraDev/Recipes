@@ -1,8 +1,6 @@
 package RecipeServicesTest;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -84,7 +82,7 @@ public class RecipeControllerTest {
         mockMvc.perform(post("/recipes").contentType(APPLICATION_JSON)
                 .content(jsonBody)
                 .header("userId", 1))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.howElaborate", is(recipe.getHowElaborate())));
     }
 
@@ -203,5 +201,24 @@ public class RecipeControllerTest {
         mockMvc.perform(get("/recipes/{id}", 1).contentType(APPLICATION_JSON)
                 .header("userId", 9))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldDelete() throws Exception {
+        Mockito.doNothing().when(recipeServices).deleteRecipe(Mockito.anyInt(), Mockito.anyInt());
+
+        mockMvc.perform(delete("/recipes/{id}", 1).contentType(APPLICATION_JSON)
+                .header("userId", 1))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void shouldNotDeleteUnauthorized() throws Exception {
+        Mockito.doThrow(new UnauthorizedException()).when(recipeServices)
+                .deleteRecipe(Mockito.anyInt(), Mockito.anyInt());
+
+        mockMvc.perform(delete("/recipes/{id}", 1).contentType(APPLICATION_JSON)
+                .header("userId", 1))
+                .andExpect(status().isUnauthorized());
     }
 }
