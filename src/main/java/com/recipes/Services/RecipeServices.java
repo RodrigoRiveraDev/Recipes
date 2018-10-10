@@ -24,11 +24,11 @@ public class RecipeServices implements IRecipeServices {
     }
 
     @Override
-    public Recipe save(Recipe recipe, long userId) throws Exception {
+    public Recipe save(Recipe recipe, long userId) throws UnauthorizedException {
 
-        User user = userServices.findUserById(userId);
-
-        if(user == null) {
+        try {
+            User user = userServices.findUserById(userId);
+        } catch (ResourceNotFoundException exception) {
             throw new UnauthorizedException();
         }
 
@@ -38,7 +38,8 @@ public class RecipeServices implements IRecipeServices {
     }
 
     @Override
-    public Recipe updateRecipeInfo(int recipeId, RecipeDTO dataToUpdate, int userId) throws Exception {
+    public Recipe updateRecipeInfo(int recipeId, RecipeDTO dataToUpdate, int userId)
+            throws ResourceNotFoundException, UnauthorizedException {
 
         Recipe recipe = recipeRepository.findById(recipeId);
 
@@ -62,7 +63,8 @@ public class RecipeServices implements IRecipeServices {
     }
 
     @Override
-    public void deleteRecipe(int userId, int recipeId) throws Exception {
+    public void deleteRecipe(int userId, int recipeId)
+            throws ResourceNotFoundException, UnauthorizedException {
 
         Recipe recipe = recipeRepository.findById(recipeId);
 
@@ -78,7 +80,7 @@ public class RecipeServices implements IRecipeServices {
     }
 
     @Override
-    public Recipe getRecipeById(int id) throws Exception  {
+    public Recipe getRecipeById(int id) throws ResourceNotFoundException  {
 
         Recipe recipe = recipeRepository.findById(id);
 

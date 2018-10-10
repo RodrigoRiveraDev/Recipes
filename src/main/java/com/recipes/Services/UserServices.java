@@ -4,6 +4,7 @@ import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
+import com.recipes.Exceptions.ResourceAlreadyExistsException;
 import com.recipes.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public User save(User user) {
+    public User save(User user) throws ResourceAlreadyExistsException {
         return userRepository.save(user);
     }
 
@@ -31,7 +32,7 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public User findUserById(long id) throws Exception {
+    public User findUserById(long id) throws ResourceNotFoundException {
         User foundUser = userRepository.findById(id);
         if(foundUser == null) {
             throw new ResourceNotFoundException(User.class, id);
@@ -40,9 +41,14 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public User updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId) {
+    public User updateUserInfo(int userIdToUpdate, UserDTO dataToUpdate, int requestUserId)
+            throws UnauthorizedException, ResourceNotFoundException {
         if(userIdToUpdate == requestUserId) {
             User foundUser = userRepository.findById(userIdToUpdate);
+            if(foundUser == null) {
+                throw new ResourceNotFoundException(User.class, userIdToUpdate);
+            }
+
             if(!dataToUpdate.getEmail().isEmpty()) {
                 foundUser.setEmail(dataToUpdate.getEmail());
             }
