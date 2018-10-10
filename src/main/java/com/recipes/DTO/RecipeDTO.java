@@ -11,46 +11,42 @@ public class RecipeDTO {
     private String howElaborate;
     private int userId;
 
-    public RecipeDTO() {
-        ingredients = null;
-        howElaborate = "";
-    }
+    /**
+     * Default constructor needed for the RecipeControllerTest
+     */
+    public RecipeDTO() { }
 
     public RecipeDTO(List<Ingredient> ingredients, String howElaborate) {
         this.ingredients = ingredients;
         this.howElaborate = howElaborate;
     }
 
+    /**
+     * @return It will return the object id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @param id It will set the object id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * @return It will return the attribute howElaborate value
+     */
     public String getHowElaborate() {
         return howElaborate;
     }
 
-    public void setHowElaborate(String howElaborate) {
-        this.howElaborate = howElaborate;
-    }
-
+    /**
+     * @return It will return the ingredients list
+     */
     public List<Ingredient> getIngredients() {
         return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     /**
