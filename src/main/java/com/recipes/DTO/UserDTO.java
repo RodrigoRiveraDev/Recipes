@@ -1,8 +1,5 @@
 package com.recipes.DTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
     private long id;
     private String fullName;
@@ -63,32 +60,10 @@ public class UserDTO {
                 +"}";
     }
 
-    public boolean hasId(int otherId) {
-        return id == otherId;
-    }
-
-    public boolean hasAllParameters() {
-        return  !fullName.isEmpty() &&
-                !email.isEmpty() &&
-                !password.isEmpty();
-    }
-
     @Override
     public boolean equals(Object obj) {
         UserDTO other = (UserDTO)obj;
         return this.password.equals(other.password) &&
                 this.email.equals(other.email) && this.fullName.equals(other.email);
-    }
-
-    public void updateInfo(UserDTO info) {
-        if(!info.getEmail().isEmpty()) {
-            this.email = info.getEmail();
-        }
-        if(!info.getFullName().isEmpty()) {
-            this.fullName = info.getFullName();
-        }
-        if(!info.getPassword().isEmpty()) {
-            this.password = info.getPassword();
-        }
     }
 }
