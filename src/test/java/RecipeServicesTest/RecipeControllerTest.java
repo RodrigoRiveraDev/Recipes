@@ -32,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -39,7 +40,7 @@ import java.util.List;
 public class RecipeControllerTest {
 
     @Autowired
-    WebApplicationContext webApplicationContext;
+    private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
 
@@ -56,7 +57,7 @@ public class RecipeControllerTest {
     @Test
     public void shouldReturnDefaultList() throws Exception {
         Recipe recipe = new Recipe("howElaborate", new ArrayList<>());
-        List<Recipe> allRecipes = Arrays.asList(recipe);
+        List<Recipe> allRecipes = Collections.singletonList(recipe);
 
         BDDMockito.given(recipeServices.getRecipeDTOList()).willReturn(allRecipes);
 
@@ -73,7 +74,7 @@ public class RecipeControllerTest {
         ingredient.setName("sugar");
         ingredient.setUnit("gr");
         ingredient.setQuantity(15);
-        Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
+        Recipe recipe = new Recipe("howElaborate", Collections.singletonList(ingredient));
 
         Mockito.when(recipeServices.save(Mockito.any(Recipe.class), Mockito.anyLong())).thenReturn(recipe);
 
@@ -92,7 +93,7 @@ public class RecipeControllerTest {
         ingredient.setName("sugar");
         ingredient.setUnit("gr");
         ingredient.setQuantity(15);
-        Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
+        Recipe recipe = new Recipe("howElaborate", Collections.singletonList(ingredient));
 
         User user = new User("fullName", "password", "a@a.com");
         user.setId(1);
@@ -115,7 +116,7 @@ public class RecipeControllerTest {
         ingredient.setName("sugar");
         ingredient.setUnit("gr");
         ingredient.setQuantity(15);
-        Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
+        Recipe recipe = new Recipe("howElaborate", Collections.singletonList(ingredient));
 
         Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenReturn(recipe);
@@ -135,7 +136,7 @@ public class RecipeControllerTest {
         ingredient.setName("sugar");
         ingredient.setUnit("gr");
         ingredient.setQuantity(15);
-        Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
+        Recipe recipe = new Recipe("howElaborate", Collections.singletonList(ingredient));
 
         Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenThrow(new UnauthorizedException());
@@ -154,7 +155,7 @@ public class RecipeControllerTest {
         ingredient.setName("sugar");
         ingredient.setUnit("gr");
         ingredient.setQuantity(15);
-        Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
+        Recipe recipe = new Recipe("howElaborate", Collections.singletonList(ingredient));
 
         Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenThrow(new ResourceNotFoundException(Recipe.class, 9));
@@ -173,7 +174,7 @@ public class RecipeControllerTest {
         ingredient.setName("sugar");
         ingredient.setUnit("gr");
         ingredient.setQuantity(15);
-        Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
+        Recipe recipe = new Recipe("howElaborate", Collections.singletonList(ingredient));
 
         Mockito.when(recipeServices.getRecipeById(Mockito.anyLong())).thenReturn(recipe);
 
@@ -191,7 +192,7 @@ public class RecipeControllerTest {
         ingredient.setName("sugar");
         ingredient.setUnit("gr");
         ingredient.setQuantity(15);
-        Recipe recipe = new Recipe("howElaborate", Arrays.asList(ingredient));
+        Recipe recipe = new Recipe("howElaborate", Collections.singletonList(ingredient));
 
         Mockito.when(recipeServices.getRecipeById(Mockito.anyLong()))
                 .thenThrow(new ResourceNotFoundException(Recipe.class, 9));

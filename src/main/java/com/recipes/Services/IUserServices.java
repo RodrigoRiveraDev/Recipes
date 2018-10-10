@@ -11,11 +11,11 @@ import java.util.List;
 public interface IUserServices {
 
     /**
-     * @param userDTO The User information to be stored
+     * @param user The User information to be stored
      * @return It will return the user that has been stored
      * @throws ResourceAlreadyExistsException In case that there is a user with the same provided data stored
      */
-    User save(User userDTO) throws ResourceAlreadyExistsException;
+    User save(User user) throws ResourceAlreadyExistsException;
 
     /**
      * @return It will return a list with all the registered users

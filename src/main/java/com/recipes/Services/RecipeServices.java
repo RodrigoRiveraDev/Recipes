@@ -45,7 +45,7 @@ public class RecipeServices implements IRecipeServices {
     }
 
     /**
-     * @param recipeId the Recipe id to udpate
+     * @param recipeId the Recipe id to update
      * @param dataToUpdate the data to update
      * @param userId the user id that request to update the Recipe
      * @return It will return the updated Recipe
