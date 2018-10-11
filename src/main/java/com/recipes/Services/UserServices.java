@@ -28,6 +28,10 @@ public class UserServices implements IUserServices {
      */
     @Override
     public User save(User user) throws ResourceAlreadyExistsException {
+        User userInDB = userRepository.findUser(user.getFullName(), user.getEmail());
+        if(userInDB != null) {
+            throw  new ResourceAlreadyExistsException(User.class);
+        }
         return userRepository.save(user);
     }
 
