@@ -1,13 +1,15 @@
 package com.recipes.Services;
 
-import com.recipes.DTO.RecipeDTO;
 import com.recipes.Entities.Recipe;
 import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Repositories.RecipeRepository;
+import com.recipes.Utilitaries.Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import recipes.sharedDomain.DTO.IngredientDTO;
+import recipes.sharedDomain.DTO.RecipeDTO;
 
 import java.util.List;
 
@@ -67,7 +69,8 @@ public class RecipeServices implements IRecipeServices {
                 recipe.setHowElaborate(dataToUpdate.getHowElaborate());
             }
             if(dataToUpdate.getIngredients().size() > 0) {
-                recipe.setIngredients(dataToUpdate.getIngredients());
+              List<IngredientDTO> ingredientDTOS = dataToUpdate.getIngredients();
+                recipe.setIngredients(Factory.toIngredientList(ingredientDTOS));
             }
             recipeRepository.save(recipe);
         } else {

@@ -9,7 +9,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.hamcrest.Matchers.is;
 
 import com.recipes.Application;
-import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceAlreadyExistsException;
 import com.recipes.Exceptions.ResourceNotFoundException;
@@ -30,6 +29,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import recipes.sharedDomain.DTO.UserDTO;
 
 import java.util.Arrays;
 import java.util.Collections;
