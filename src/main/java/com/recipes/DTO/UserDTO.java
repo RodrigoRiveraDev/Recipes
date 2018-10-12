@@ -1,8 +1,5 @@
 package com.recipes.DTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
     private long id;
     private String fullName;
@@ -15,45 +12,30 @@ public class UserDTO {
         this.password = "";
     }
 
-    public UserDTO(long id, String fullName, String email, String password) {
-        this.id = id;
-        this.fullName = fullName;
-        this.email = email;
-        this.password = password;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
+    /**
+     * @return It will return the fullName value
+     */
     public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
+    /**
+     * @return It will return the email value
+     */
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    /**
+     * @return It will return the password value
+     */
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    /**
+     * @return It will return the object as a String with Json format
+     */
     @Override
     public String toString() {
         return "{"+
@@ -63,32 +45,4 @@ public class UserDTO {
                 +"}";
     }
 
-    public boolean hasId(int otherId) {
-        return id == otherId;
-    }
-
-    public boolean hasAllParameters() {
-        return  !fullName.isEmpty() &&
-                !email.isEmpty() &&
-                !password.isEmpty();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        UserDTO other = (UserDTO)obj;
-        return this.password.equals(other.password) &&
-                this.email.equals(other.email) && this.fullName.equals(other.email);
-    }
-
-    public void updateInfo(UserDTO info) {
-        if(!info.getEmail().isEmpty()) {
-            this.email = info.getEmail();
-        }
-        if(!info.getFullName().isEmpty()) {
-            this.fullName = info.getFullName();
-        }
-        if(!info.getPassword().isEmpty()) {
-            this.password = info.getPassword();
-        }
-    }
 }

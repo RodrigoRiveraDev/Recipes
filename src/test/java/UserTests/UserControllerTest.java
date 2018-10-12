@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.is;
 import com.recipes.Application;
 import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
+import com.recipes.Exceptions.ResourceAlreadyExistsException;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
 import com.recipes.Services.UserServices;
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -38,7 +40,7 @@ import java.util.List;
 public class UserControllerTest {
 
     @Autowired
-    WebApplicationContext webApplicationContext;
+    private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
 
@@ -53,7 +55,7 @@ public class UserControllerTest {
     @Test
     public void shouldReturnDefaultList() throws Exception {
         User user = new User("fullName", "password", "a@a.com");
-        List<User> allUsers = Arrays.asList(user);
+        List<User> allUsers = Collections.singletonList(user);
 
         BDDMockito.given(userServices.getUserList()).willReturn(allUsers);
 
@@ -78,8 +80,26 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/users").contentType(APPLICATION_JSON)
                 .content(bodyAsJson.toString()))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.fullName", is(user.getFullName())));
+    }
+
+    @Test
+    public void shouldNotAddNewUserResourceAlreadyExistsException() throws Exception {
+        User user = new User("fullName", "password", "a@a.com");
+        user.setId(1);
+
+        JSONObject bodyAsJson = new JSONObject();
+        bodyAsJson.put("fullName", user.getFullName());
+        bodyAsJson.put("password", user.getPassword());
+        bodyAsJson.put("email", user.getEmail());
+
+        Mockito.when(userServices.save(Mockito.any(User.class)))
+                .thenThrow(new ResourceAlreadyExistsException(User.class));
+
+        mockMvc.perform(post("/users").contentType(APPLICATION_JSON)
+                .content(bodyAsJson.toString()))
+                .andExpect(status().isConflict());
     }
 
     @Test
@@ -94,7 +114,8 @@ public class UserControllerTest {
         bodyAsJson.put("password", "");
         bodyAsJson.put("email", "");
 
-        Mockito.when(userServices.updateUserInfo(Mockito.anyInt(), Mockito.any(UserDTO.class), Mockito.anyInt())).thenReturn(updatedUser);
+        Mockito.when(userServices.updateUserInfo(Mockito.anyLong(), Mockito.any(UserDTO.class), Mockito.anyLong()))
+                .thenReturn(updatedUser);
 
         mockMvc.perform(put("/users/"+user.getId()).contentType(APPLICATION_JSON)
                 .content(bodyAsJson.toString()).header("userId", user.getId()))
@@ -116,11 +137,11 @@ public class UserControllerTest {
         bodyAsJson.put("password", "");
         bodyAsJson.put("email", "");
 
-        Mockito.when(userServices.updateUserInfo(Mockito.anyInt(), Mockito.any(UserDTO.class), Mockito.anyInt()))
+        Mockito.when(userServices.updateUserInfo(Mockito.anyLong(), Mockito.any(UserDTO.class), Mockito.anyLong()))
                 .thenThrow(new UnauthorizedException());
 
         mockMvc.perform(put("/users/1").contentType(APPLICATION_JSON)
-                .content(bodyAsJson.toString()).header("userId", 2))
+                .content(bodyAsJson.toString()).header("userId", 20))
                 .andExpect(status().isUnauthorized());
     }
 

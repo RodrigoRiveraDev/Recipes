@@ -6,6 +6,7 @@ import com.recipes.Entities.Recipe;
 import com.recipes.Services.IRecipeServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,6 +27,7 @@ public class RecipeController {
      * @return This will return a JSON with the created Recipe object or an exception
      */
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Recipe registerRecipe(@RequestHeader(value="userId") int userId,
                                  @RequestBody Recipe newRecipe) throws Exception{
         return recipeServices.save(newRecipe, userId);
@@ -50,6 +52,7 @@ public class RecipeController {
      * @param id The recipe id
      */
     @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRecipe(@RequestHeader(value="userId") int userId, @PathVariable int id) throws Exception {
         recipeServices.deleteRecipe(userId, id);
     }
