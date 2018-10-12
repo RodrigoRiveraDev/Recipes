@@ -68,11 +68,11 @@
             <version>${springfox-swagger-ui.version}</version>
             <scope>compile</scope>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>RecipesSharedDomain</groupId>
             <artifactId>RecipesSharedDomain</artifactId>
             <version>${RecipesSharedDomain.version}</version>
-        </dependency-->
+        </dependency>
     </dependencies>
 
     <build>
