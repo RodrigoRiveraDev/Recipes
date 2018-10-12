@@ -1,6 +1,5 @@
 package com.recipes.Services;
 
-import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
@@ -8,6 +7,7 @@ import com.recipes.Exceptions.ResourceAlreadyExistsException;
 import com.recipes.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import recipes.sharedDomain.DTO.UserDTO;
 
 import java.util.List;
 

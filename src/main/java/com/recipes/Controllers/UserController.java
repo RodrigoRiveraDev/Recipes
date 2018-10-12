@@ -1,13 +1,13 @@
 package com.recipes.Controllers;
 
 import java.util.List;
-import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
 import com.recipes.Services.IUserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import recipes.sharedDomain.DTO.UserDTO;
 
 @RestController
 @RequestMapping("/users")

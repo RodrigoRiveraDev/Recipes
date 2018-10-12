@@ -1,9 +1,9 @@
 package com.recipes.Services;
 
-import com.recipes.DTO.RecipeDTO;
 import com.recipes.Entities.Recipe;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
+import recipes.sharedDomain.DTO.RecipeDTO;
 
 import java.util.List;
 
