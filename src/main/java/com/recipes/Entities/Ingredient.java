@@ -27,34 +27,58 @@ public class Ingredient {
         this.unit = unit;
     }
 
+    /**
+     * @param id param to replace the current id
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * @param name param to replace the current name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * @param quantity param to replace the current quantity
+     */
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
+    /**
+     * @param unit param to replace the current unity
+     */
     public void setUnit(String unit) {
         this.unit = unit;
     }
 
+    /**
+     * @return It will return the current object id
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * @return It will return the current object name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return It will return the current object quantity
+     */
     public double getQuantity() {
         return quantity;
     }
 
+    /**
+     * @return It will return the current object unit
+     */
     public String getUnit() {
         return unit;
     }

@@ -23,12 +23,19 @@ public class RecipeServices implements IRecipeServices {
         this.userServices = userServices;
     }
 
+    /**
+     * @param recipe The Recipe entity to be stored in the DB
+     * @param userId The user id that request to store the Recipe and its owner
+     * @return It will return the Recipe entity stored
+     * @throws UnauthorizedException It will be thrown if the user that request to store
+     * the Recipe is not registered in the DB
+     */
     @Override
-    public Recipe save(Recipe recipe, long userId) throws Exception {
+    public Recipe save(Recipe recipe, long userId) throws UnauthorizedException {
 
-        User user = userServices.findUserById(userId);
-
-        if(user == null) {
+        try {
+            User user = userServices.findUserById(userId);
+        } catch (ResourceNotFoundException exception) {
             throw new UnauthorizedException();
         }
 
@@ -37,8 +44,17 @@ public class RecipeServices implements IRecipeServices {
         return recipeRepository.save(recipe);
     }
 
+    /**
+     * @param recipeId the Recipe id to update
+     * @param dataToUpdate the data to update
+     * @param userId the user id that request to update the Recipe
+     * @return It will return the updated Recipe
+     * @throws ResourceNotFoundException It will be thrown if the is not a Recipe with the provided id stored
+     * @throws UnauthorizedException It will be thrown if the user that request is not the recipe owner
+     */
     @Override
-    public Recipe updateRecipeInfo(int recipeId, RecipeDTO dataToUpdate, int userId) throws Exception {
+    public Recipe updateRecipeInfo(long recipeId, RecipeDTO dataToUpdate, long userId)
+            throws ResourceNotFoundException, UnauthorizedException {
 
         Recipe recipe = recipeRepository.findById(recipeId);
 
@@ -61,8 +77,15 @@ public class RecipeServices implements IRecipeServices {
         return recipe;
     }
 
+    /**
+     * @param userId The user that request to delete the Recipe
+     * @param recipeId The recipe id to delete
+     * @throws ResourceNotFoundException It will be thrown if the is not a Recipe with the provided id stored
+     * @throws UnauthorizedException It will be thrown if the user that request is not the recipe owner
+     */
     @Override
-    public void deleteRecipe(int userId, int recipeId) throws Exception {
+    public void deleteRecipe(long userId, long recipeId)
+            throws ResourceNotFoundException, UnauthorizedException {
 
         Recipe recipe = recipeRepository.findById(recipeId);
 
@@ -77,8 +100,13 @@ public class RecipeServices implements IRecipeServices {
         recipeRepository.delete(recipe);
     }
 
+    /**
+     * @param id The recipe id to search in the DB
+     * @return It will return the Recipe entity
+     * @throws ResourceNotFoundException It will be thrown if there is not a Recipe with the provided id stored
+     */
     @Override
-    public Recipe getRecipeById(int id) throws Exception  {
+    public Recipe getRecipeById(long id) throws ResourceNotFoundException  {
 
         Recipe recipe = recipeRepository.findById(id);
 
@@ -89,6 +117,9 @@ public class RecipeServices implements IRecipeServices {
         return recipe;
     }
 
+    /**
+     * @return It will retrieve a list with all the stored Recipes
+     */
     @Override
     public List<Recipe> getRecipeDTOList() {
         return recipeRepository.findAll();

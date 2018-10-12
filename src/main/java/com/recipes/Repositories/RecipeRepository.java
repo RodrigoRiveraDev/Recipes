@@ -11,11 +11,19 @@ import java.util.List;
 
 public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 
+    /**
+     * @param id The recipe id to search for
+     * @return It will return the entity with the provided id or null
+     */
     Recipe findById(long id);
 
     @Query("SELECT r FROM Recipe r")
     List<Recipe> findAll();
 
+    /**
+     * @param recipeId The recipe id to delete
+     * @param userId The owner recipe id
+     */
     @Transactional
     @Modifying
     @Query("DELETE FROM Recipe r WHERE r.id = :id AND r.userId = :userId")
