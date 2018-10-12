@@ -1,10 +1,10 @@
 package com.recipes.Services;
 
-import com.recipes.DTO.UserDTO;
 import com.recipes.Entities.User;
 import com.recipes.Exceptions.ResourceAlreadyExistsException;
 import com.recipes.Exceptions.ResourceNotFoundException;
 import com.recipes.Exceptions.UnauthorizedException;
+import recipes.sharedDomain.DTO.UserDTO;
 
 import java.util.List;
 

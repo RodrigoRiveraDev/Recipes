@@ -7,7 +7,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.hamcrest.Matchers.is;
 
 import com.recipes.Application;
-import com.recipes.DTO.RecipeDTO;
 import com.recipes.Entities.Ingredient;
 import com.recipes.Entities.Recipe;
 import com.recipes.Entities.User;
@@ -29,9 +28,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import recipes.sharedDomain.DTO.RecipeDTO;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class RecipeControllerTest {
 
         Mockito.when(recipeServices.save(Mockito.any(Recipe.class), Mockito.anyLong())).thenReturn(recipe);
 
-        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
+        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toJSON();
 
         mockMvc.perform(post("/recipes").contentType(APPLICATION_JSON)
                 .content(jsonBody)
@@ -102,7 +101,7 @@ public class RecipeControllerTest {
         Mockito.when(recipeServices.save(Mockito.any(Recipe.class), Mockito.anyLong()))
                 .thenThrow(new UnauthorizedException());
 
-        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
+        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toJSON();
 
         mockMvc.perform(post("/recipes").contentType(APPLICATION_JSON)
                 .content(jsonBody)
@@ -121,7 +120,7 @@ public class RecipeControllerTest {
         Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenReturn(recipe);
 
-        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
+        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toJSON();
 
         mockMvc.perform(put("/recipes/{id}", 2).contentType(APPLICATION_JSON)
                 .content(jsonBody)
@@ -141,7 +140,7 @@ public class RecipeControllerTest {
         Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenThrow(new UnauthorizedException());
 
-        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
+        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toJSON();
 
         mockMvc.perform(put("/recipes/{id}", 2).contentType(APPLICATION_JSON)
                 .content(jsonBody)
@@ -160,7 +159,7 @@ public class RecipeControllerTest {
         Mockito.when(recipeServices.updateRecipeInfo(Mockito.anyLong(), Mockito.any(RecipeDTO.class), Mockito.anyLong()))
                 .thenThrow(new ResourceNotFoundException(Recipe.class, 9));
 
-        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
+        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toJSON();
 
         mockMvc.perform(put("/recipes/{id}", 20).contentType(APPLICATION_JSON)
                 .content(jsonBody)
@@ -177,8 +176,6 @@ public class RecipeControllerTest {
         Recipe recipe = new Recipe("howElaborate", Collections.singletonList(ingredient));
 
         Mockito.when(recipeServices.getRecipeById(Mockito.anyLong())).thenReturn(recipe);
-
-        String jsonBody = com.recipes.Utilitaries.Factory.recipeDTO(recipe).toString();
 
         mockMvc.perform(get("/recipes/{id}", 1).contentType(APPLICATION_JSON)
                 .header("userId", 20))

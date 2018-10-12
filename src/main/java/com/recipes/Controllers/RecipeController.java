@@ -1,13 +1,14 @@
 package com.recipes.Controllers;
 
 import java.util.List;
-import com.recipes.DTO.RecipeDTO;
+
 import com.recipes.Entities.Recipe;
 import com.recipes.Services.IRecipeServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import recipes.sharedDomain.DTO.RecipeDTO;
 
 @RestController
 @RequestMapping("/recipes")
